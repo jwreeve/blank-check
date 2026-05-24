@@ -1,5 +1,5 @@
 export const series = [
-  // Ordered by most recent episode date (RSS feed order), Porch Classics pinned last
+  // Top 3 most recent series, then ordered by first wiki episode appearance, Porch Classics pinned last
   {
     id: "podnic-at-hanging-cast",
     title: "Podnic at Hanging Cast",
@@ -18,24 +18,7 @@ export const series = [
     director: "Sam Raimi",
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704906947700-6AZHY98COLDUKK2I76R7/PODCAST-ME-TO-HELL-1400.jpg",
   },
-  {
-    id: "im-a-podcast-but-thats-ok",
-    title: "I'm a Podcast, But That's OK",
-    director: "Park Chan-wook",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704907832017-DMT35P3YR4PYUF2QG80Z/I%27m-a-Podcast.png",
-  },
-  {
-    id: "podinator-judgment-cast",
-    title: "Podinator: Judgment Cast",
-    director: "James Cameron",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/0e9b340e-1dad-41b4-892a-5c19ec5db961/Podinator+Judgmentcast.png",
-  },
-  {
-    id: "podcast-news",
-    title: "Podcast News",
-    director: "James L. Brooks",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905388366-9YT22LWNX05E67QYQRKP/Podcast-News-JPEG-Canary.jpg",
-  },
+  // Rest ordered by first episode appearance, newest first (reverse chronological)
   {
     id: "pod-country-for-old-cast",
     title: "Pod Country for Old Cast",
@@ -43,22 +26,10 @@ export const series = [
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/129382aa-05f3-4094-a109-3341fee8b62c/Pod-Country-for-Old-Cast.png",
   },
   {
-    id: "pod-19-the-widowcaster",
-    title: "Pod-19: The Widowcaster",
-    director: "Kathryn Bigelow",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905261974-SMDQBY70F5DRK6JJ286V/pod-19-the-widowcaster-audioboom.png",
-  },
-  {
     id: "pod-times-at-ridgemont-cast",
     title: "Pod Times at Ridgemont Cast",
     director: "Amy Heckerling",
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/f8016dbe-0402-4d0a-bfb2-cff99613be9f/Pod-Times-at-Ridgemont-Cast.png",
-  },
-  {
-    id: "trainspodcasting",
-    title: "Trainspodcasting",
-    director: "Danny Boyle",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704907573079-JMRE7VHUMAQ9AW56VG3B/Trainspodcasting.png",
   },
   {
     id: "podrassic-cast",
@@ -73,24 +44,6 @@ export const series = [
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/18c25b61-b41f-4aba-8f7e-d0aeb2a7ebe4/Twin-Pods--Fire-Cast-with-Me-Revision.png",
   },
   {
-    id: "somethings-podda-cast",
-    title: "Something's Podda Cast",
-    director: "Nancy Meyers",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905607188-V0Z80X7W2H70CN423N3S/Something_s-Podda-Cast-Hi-Res.png",
-  },
-  {
-    id: "podward-scissorcast",
-    title: "Podward Scissorcast",
-    director: "Tim Burton",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905653755-V1X953O1M2K6T54LIR0Y/Podward-Scissorcast.jpg",
-  },
-  {
-    id: "pod-night-shyamacast",
-    title: "Pod Night Shyamacast",
-    director: "M. Night Shyamalan",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/5a8f8a46-c951-46a4-ad90-583393488214/Pod+Night+Shyamacast.png",
-  },
-  {
     id: "podcast-with-wolves",
     title: "Podcast with Wolves",
     director: "Kevin Costner",
@@ -101,12 +54,6 @@ export const series = [
     title: "Podverly Hills Cast",
     director: "Martin Brest",
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/ac4af546-f156-46a1-ad02-73cc24dfcb4b/Podverly-Hills-Cast.png",
-  },
-  {
-    id: "mad-pod-fury-cast",
-    title: "Mad Pod: Fury Cast",
-    director: "George Miller",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905935143-1CC9T3JI7MCN0UCQ21JO/Mad-Pod-1400.jpg",
   },
   {
     id: "podprikast",
@@ -127,22 +74,16 @@ export const series = [
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1705786584047-6UM0C7A74IPOK2ZWKB8J/Podcastl.jpg",
   },
   {
-    id: "howls-moving-podcastle",
-    title: "Howl's Moving Podcastle",
-    director: "Hayao Miyazaki",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905822012-DI40DU7U4H0X83LSTWZW/Podcastle-Hi-Res.png",
-  },
-  {
     id: "the-curious-pod-of-benjamin-buttcast",
     title: "The Curious Pod of Benjamin Buttcast",
     director: "David Fincher",
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704907960564-3AI4JKRKD4Q7DJ578ZHU/Benjamin-Buttcast.png",
   },
   {
-    id: "the-pod-knight-casts",
-    title: "The Pod Knight Casts",
-    director: "Christopher Nolan",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905199853-JW0FYZP7WETEC997EB7G/thepodknightcasts-audioboom.jpg",
+    id: "im-a-podcast-but-thats-ok",
+    title: "I'm a Podcast, But That's OK",
+    director: "Park Chan-wook",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704907832017-DMT35P3YR4PYUF2QG80Z/I%27m-a-Podcast.png",
   },
   {
     id: "podcast-jr",
@@ -151,10 +92,10 @@ export const series = [
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704907708743-VEMKWDLMOHH9V0STR2GW/Podcast-Jr-Buster-Keaton.png",
   },
   {
-    id: "pod-and-basketcast",
-    title: "Pod & Basketcast",
-    director: "Gina Prince-Bythewood",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704906288000-YVCMPVAFXJ72O72M3ANE/Pod-_-Basketcast-1400+%281%29.jpg",
+    id: "trainspodcasting",
+    title: "Trainspodcasting",
+    director: "Danny Boyle",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704907573079-JMRE7VHUMAQ9AW56VG3B/Trainspodcasting.png",
   },
   {
     id: "the-podmare-before-castmas",
@@ -163,22 +104,10 @@ export const series = [
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704907431709-ZX9W374XN9CR6CLW7U1J/Podmare-Before-Castmas-1400.jpg",
   },
   {
-    id: "pod-me-if-you-cast",
-    title: "Pod Me If You Cast",
-    director: "Steven Spielberg: The DreamWorks Years",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/0211a035-8b7d-458c-8de6-2142e89bd946/Pod+me+if+you+cast.png",
-  },
-  {
     id: "pods-wide-cast",
     title: "Pods Wide Cast",
     director: "Stanley Kubrick",
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704907350526-1QLW6LSF126ZDSECIWQS/Pods-Wide-Cast_copy.png",
-  },
-  {
-    id: "podcast-away",
-    title: "Podcast Away",
-    director: "Robert Zemeckis",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704906333800-A2J0Y64MRX8PIN55B2T2/Podcast-Away-1400.jpg",
   },
   {
     id: "pod-that-jazzcast",
@@ -191,18 +120,6 @@ export const series = [
     title: "The Podcastiano",
     director: "Jane Campion",
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/a0b818c7-67ef-4598-93ee-55106695f964/Campion-1400.jpg",
-  },
-  {
-    id: "the-podchowski-casters",
-    title: "The Podchowski Casters",
-    director: "The Wachowskis",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/c9416069-2f5f-41df-b7c0-e52e5cf190a9/The+Podchowski+Casters.png",
-  },
-  {
-    id: "podship-casters",
-    title: "Podship Casters",
-    director: "Paul Verhoeven",
-    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905314243-RKRDHCUITLU5DIZD49HD/Podship-Casters-JPEG.jpg",
   },
   {
     id: "they-podcast",
@@ -229,10 +146,28 @@ export const series = [
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704906440552-S57V2H8O6UG0CL6O2L14/The-Poddle-Mercast-1400.jpg",
   },
   {
+    id: "podcast-away",
+    title: "Podcast Away",
+    director: "Robert Zemeckis",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704906333800-A2J0Y64MRX8PIN55B2T2/Podcast-Away-1400.jpg",
+  },
+  {
+    id: "pod-and-basketcast",
+    title: "Pod & Basketcast",
+    director: "Gina Prince-Bythewood",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704906288000-YVCMPVAFXJ72O72M3ANE/Pod-_-Basketcast-1400+%281%29.jpg",
+  },
+  {
     id: "youve-got-podcast",
     title: "You've Got Podcast",
     director: "Nora Ephron",
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704906179199-HBP3HRSKUCXYHC0L8M4M/You_ve-Got-Podcast-1400.jpg",
+  },
+  {
+    id: "mad-pod-fury-cast",
+    title: "Mad Pod: Fury Cast",
+    director: "George Miller",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905935143-1CC9T3JI7MCN0UCQ21JO/Mad-Pod-1400.jpg",
   },
   {
     id: "stop-making-podcasts",
@@ -241,10 +176,28 @@ export const series = [
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905856405-7X0JNKRJX0V78CONTICM/Stop-Making-Podcasts-1400.jpg",
   },
   {
+    id: "howls-moving-podcastle",
+    title: "Howl's Moving Podcastle",
+    director: "Hayao Miyazaki",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905822012-DI40DU7U4H0X83LSTWZW/Podcastle-Hi-Res.png",
+  },
+  {
     id: "the-cast-of-the-podhicans",
     title: "The Cast of the Podhicans",
     director: "Michael Mann",
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704906470534-KXE0BQSJZ8P803ZU847I/Cast-of-the-Podhicans-4.png",
+  },
+  {
+    id: "podward-scissorcast",
+    title: "Podward Scissorcast",
+    director: "Tim Burton",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905653755-V1X953O1M2K6T54LIR0Y/Podward-Scissorcast.jpg",
+  },
+  {
+    id: "somethings-podda-cast",
+    title: "Something's Podda Cast",
+    director: "Nancy Meyers",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905607188-V0Z80X7W2H70CN423N3S/Something_s-Podda-Cast-Hi-Res.png",
   },
   {
     id: "podback-mountcast",
@@ -259,10 +212,58 @@ export const series = [
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905493192-VSZV71O1N18Q9NJ0V10V/Podcastibles-JPEG+%281%29.jpg",
   },
   {
+    id: "podcast-news",
+    title: "Podcast News",
+    director: "James L. Brooks",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905388366-9YT22LWNX05E67QYQRKP/Podcast-News-JPEG-Canary.jpg",
+  },
+  {
+    id: "podship-casters",
+    title: "Podship Casters",
+    director: "Paul Verhoeven",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905314243-RKRDHCUITLU5DIZD49HD/Podship-Casters-JPEG.jpg",
+  },
+  {
+    id: "pod-19-the-widowcaster",
+    title: "Pod-19: The Widowcaster",
+    director: "Kathryn Bigelow",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905261974-SMDQBY70F5DRK6JJ286V/pod-19-the-widowcaster-audioboom.png",
+  },
+  {
+    id: "the-pod-knight-casts",
+    title: "The Pod Knight Casts",
+    director: "Christopher Nolan",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704905199853-JW0FYZP7WETEC997EB7G/thepodknightcasts-audioboom.jpg",
+  },
+  {
+    id: "pod-me-if-you-cast",
+    title: "Pod Me If You Cast",
+    director: "Steven Spielberg: The DreamWorks Years",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/0211a035-8b7d-458c-8de6-2142e89bd946/Pod+me+if+you+cast.png",
+  },
+  {
+    id: "podinator-judgment-cast",
+    title: "Podinator: Judgment Cast",
+    director: "James Cameron",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/0e9b340e-1dad-41b4-892a-5c19ec5db961/Podinator+Judgmentcast.png",
+  },
+  {
     id: "we-pod-a-cast",
     title: "We Pod A Cast",
     director: "Cameron Crowe",
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/e57ba95f-66ce-4bd2-b689-7d6d8b545882/We+Pod+A+Cast.png",
+  },
+  {
+    id: "the-podchowski-casters",
+    title: "The Podchowski Casters",
+    director: "The Wachowskis",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/c9416069-2f5f-41df-b7c0-e52e5cf190a9/The+Podchowski+Casters.png",
+  },
+  {
+    id: "pod-night-shyamacast",
+    title: "Pod Night Shyamacast",
+    director: "M. Night Shyamalan",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/5a8f8a46-c951-46a4-ad90-583393488214/Pod+Night+Shyamacast.png",
   },
   {
     id: "the-star-wars-sequels",
