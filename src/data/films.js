@@ -1,4 +1,8 @@
 export const filmsBySeries = {
+  "podd-c": [
+    { title: "Finding Nemo", year: 2003 },
+    { title: "WALL-E", year: 2008 },
+  ],
   "podnic-at-hanging-cast": [
     { title: "The Cars That Ate Paris", year: 1974 },
     { title: "Picnic at Hanging Rock", year: 1975 },
@@ -12,6 +16,7 @@ export const filmsBySeries = {
     { title: "Fearless", year: 1993 },
     { title: "The Truman Show", year: 1998 },
     { title: "Master and Commander: The Far Side of the World", year: 2003 },
+    { title: "The Way Back", year: 2010 },
   ],
   "we-need-to-pod-about-castvin": [
     { title: "Ratcatcher", year: 1999 },

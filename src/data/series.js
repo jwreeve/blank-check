@@ -1,6 +1,12 @@
 export const series = [
   // Top 3 most recent series, then ordered by first wiki episode appearance, Porch Classics pinned last
   {
+    id: "podd-c",
+    title: "PODD-C",
+    director: "Andrew Stanton",
+    image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/fa60ecb6-bf7f-442f-a9de-06401b5fd271/PODD-CwBeard.png",
+  },
+  {
     id: "podnic-at-hanging-cast",
     title: "Podnic at Hanging Cast",
     director: "Peter Weir",
@@ -12,13 +18,13 @@ export const series = [
     director: "Lynne Ramsay",
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/247e8815-7251-4a75-8c6e-adc2ae6d95c6/We-Need-To-Pod-About-Castvin.png",
   },
+  // Rest ordered by first episode appearance, newest first (reverse chronological)
   {
     id: "podcast-me-to-hell",
     title: "Podcast Me to Hell",
     director: "Sam Raimi",
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/1704906947700-6AZHY98COLDUKK2I76R7/PODCAST-ME-TO-HELL-1400.jpg",
   },
-  // Rest ordered by first episode appearance, newest first (reverse chronological)
   {
     id: "pod-country-for-old-cast",
     title: "Pod Country for Old Cast",
