@@ -1,8 +1,11 @@
-export default function SeriesCard({ series, onClick }) {
+export default function SeriesCard({ series, channelNumber, onClick }) {
   return (
     <div className="series-card" onClick={onClick} role="button" tabIndex={0}
       onKeyDown={(e) => e.key === "Enter" && onClick?.()}>
       <div className="series-card-image-wrap">
+        {channelNumber != null && (
+          <span className="series-card-channel">CH {String(channelNumber).padStart(2, "0")}</span>
+        )}
         <img
           src={series.image}
           alt={series.title}
