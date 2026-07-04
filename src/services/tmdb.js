@@ -24,7 +24,13 @@ async function get(path, params = {}) {
 
 export async function searchMovie(title, year) {
   const data = await get("/search/movie", { query: title, year, language: "en-US" });
-  return data.results?.[0] ?? null;
+  const results = data.results ?? [];
+  if (results.length === 0) return null;
+  // TMDB doesn't rank results by relevance for stylized/punctuation-heavy
+  // titles (e.g. "WALL-E" surfaces a "WALL·E's Treasures & Trinkets" short
+  // ahead of the actual film), so prefer the most popular match instead of
+  // trusting result order.
+  return results.reduce((best, r) => (r.popularity > best.popularity ? r : best));
 }
 
 export async function getWatchProviders(tmdbId) {

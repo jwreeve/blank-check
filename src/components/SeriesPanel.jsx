@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { filmsBySeries } from "../data/films";
 import { useStreamingData } from "../hooks/useStreamingData";
 import { IMG_BASE } from "../services/tmdb";
@@ -69,59 +68,44 @@ function SkeletonRow() {
   );
 }
 
-export default function SeriesPanel({ series, onClose }) {
+export default function SeriesPanel({ series }) {
   const films = filmsBySeries[series.id] ?? [];
   const { data, loading, error } = useStreamingData(films);
   const seriesUrl = `https://blankcheck.beam.ly/category/${series.id}`;
 
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, []);
-
   return (
-    <>
-      <div className="panel-backdrop" onClick={onClose} />
-      <div className="series-panel" role="dialog" aria-modal="true">
-        <div className="panel-header">
-          <img src={series.image} alt={series.title} className="panel-thumb" />
-          <div className="panel-header-text">
-            <h2 className="panel-title">{series.director}</h2>
-            <p className="panel-director">{series.title}</p>
-            <a
-              href={seriesUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="panel-series-link"
-            >
-              View series on Blank Check →
-            </a>
-          </div>
-          <button className="panel-close" onClick={onClose} aria-label="Close">✕</button>
-        </div>
-
-        <div className="panel-body">
-          {error && <p className="panel-error">{error}</p>}
-
-          {loading &&
-            (films.length > 0 ? films : Array(5).fill(null)).map((f, i) => (
-              <SkeletonRow key={i} />
-            ))}
-
-          {data &&
-            data.map((film) => <FilmRow key={`${film.title}-${film.year}`} film={film} />)}
-
-          {!loading && films.length === 0 && (
-            <p className="panel-empty">Film list coming soon.</p>
-          )}
+    <div className="now-playing">
+      <div className="panel-header">
+        <img src={series.image} alt={series.title} className="panel-thumb" />
+        <div className="panel-header-text">
+          <h2 className="panel-title">{series.director}</h2>
+          <p className="panel-director">{series.title}</p>
+          <a
+            href={seriesUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="panel-series-link"
+          >
+            View series on Blank Check →
+          </a>
         </div>
       </div>
-    </>
+
+      <div className="panel-body">
+        {error && <p className="panel-error">{error}</p>}
+
+        {loading &&
+          (films.length > 0 ? films : Array(5).fill(null)).map((f, i) => (
+            <SkeletonRow key={i} />
+          ))}
+
+        {data &&
+          data.map((film) => <FilmRow key={`${film.title}-${film.year}`} film={film} />)}
+
+        {!loading && films.length === 0 && (
+          <p className="panel-empty">Film list coming soon.</p>
+        )}
+      </div>
+    </div>
   );
 }
