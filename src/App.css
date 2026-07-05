@@ -11,7 +11,7 @@ body {
 }
 
 .channel-guide {
-  padding: 32px 24px 64px;
+  padding: 20px 16px 40px;
 }
 
 .channel-guide-home {
@@ -21,23 +21,29 @@ body {
   justify-content: center;
 }
 
+.channel-guide-home main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .site-header {
-  padding: 0 0 32px;
+  padding: 0 0 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .site-header h1 {
-  font-size: 2.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #fff;
 }
 
 .site-subtitle {
-  margin-top: 8px;
+  margin-top: 6px;
   color: #999;
-  font-size: 1rem;
+  font-size: 0.85rem;
 }
 
 /* ── Now Showing (hero) ── */
@@ -51,7 +57,6 @@ body {
   border-radius: 10px;
   cursor: pointer;
   background: #111;
-  margin-bottom: 20px;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.15s ease;
 }
 
@@ -84,8 +89,8 @@ body {
 }
 
 .now-showing-media {
-  width: 150px;
-  height: 150px;
+  width: 96px;
+  height: 96px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -107,16 +112,16 @@ body {
 }
 
 .now-showing-title {
-  margin-top: 8px;
-  font-size: 1.5rem;
+  margin-top: 6px;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #fff;
   line-height: 1.2;
 }
 
 .now-showing-director {
-  margin-top: 6px;
-  font-size: 1rem;
+  margin-top: 4px;
+  font-size: 0.85rem;
   color: #ccc;
 }
 

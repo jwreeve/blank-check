@@ -91,8 +91,8 @@ export default function App() {
         {view === "home" && (
           <div className="channel-guide channel-guide-home">
             <main>
-              <NowShowing series={current} onClick={() => play(current)} />
               <ChannelGuideEntry count={series.length} onClick={openGuide} />
+              <NowShowing series={current} onClick={() => play(current)} />
             </main>
           </div>
         )}
