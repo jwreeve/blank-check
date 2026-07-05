@@ -15,14 +15,15 @@ export function useStreamingData(films) {
     setError(null);
 
     Promise.all(
-      films.map(async ({ title, year }) => {
+      films.map(async (film) => {
+        const { title, year } = film;
         try {
           const movie = await searchMovie(title, year);
-          if (!movie) return { title, year, providers: null, tmdbId: null };
+          if (!movie) return { ...film, providers: null, tmdbId: null };
           const providers = await getWatchProviders(movie.id);
-          return { title, year, providers, tmdbId: movie.id };
+          return { ...film, providers, tmdbId: movie.id };
         } catch (e) {
-          return { title, year, providers: null, tmdbId: null, fetchError: e.message };
+          return { ...film, providers: null, tmdbId: null, fetchError: e.message };
         }
       })
     )

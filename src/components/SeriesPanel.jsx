@@ -1,6 +1,12 @@
+import { useMemo } from "react";
 import { filmsBySeries } from "../data/films";
 import { useStreamingData } from "../hooks/useStreamingData";
+import { useDirectorFilmography } from "../hooks/useDirectorFilmography";
 import { IMG_BASE } from "../services/tmdb";
+
+function normalizeTitle(title) {
+  return title.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
 
 function ProviderBadge({ provider, watchLink }) {
   return (
@@ -45,6 +51,7 @@ function FilmRow({ film }) {
       <div className="film-meta">
         <span className="film-title">{film.title}</span>
         <span className="film-year">{film.year}</span>
+        {film.upcoming && <span className="film-upcoming-tag">Not yet covered</span>}
       </div>
       <div className="film-providers">
         {unique.length > 0 ? (
@@ -68,8 +75,19 @@ function SkeletonRow() {
   );
 }
 
-export default function SeriesPanel({ series }) {
-  const films = filmsBySeries[series.id] ?? [];
+export default function SeriesPanel({ series, isCurrent }) {
+  const curatedFilms = useMemo(() => filmsBySeries[series.id] ?? [], [series.id]);
+  const filmography = useDirectorFilmography(series.director, !!isCurrent);
+
+  const films = useMemo(() => {
+    if (!filmography) return curatedFilms;
+    const known = new Set(curatedFilms.map((f) => normalizeTitle(f.title)));
+    const upcoming = filmography
+      .filter((f) => !known.has(normalizeTitle(f.title)))
+      .map((f) => ({ title: f.title, year: f.year, upcoming: true }));
+    return [...curatedFilms, ...upcoming].sort((a, b) => a.year - b.year);
+  }, [curatedFilms, filmography]);
+
   const { data, loading, error } = useStreamingData(films);
   const seriesUrl = `https://blankcheck.beam.ly/category/${series.id}`;
 
@@ -100,7 +118,9 @@ export default function SeriesPanel({ series }) {
           ))}
 
         {data &&
-          data.map((film) => <FilmRow key={`${film.title}-${film.year}`} film={film} />)}
+          data.map((film) => (
+            <FilmRow key={`${film.title}-${film.year}`} film={film} />
+          ))}
 
         {!loading && films.length === 0 && (
           <p className="panel-empty">Film list coming soon.</p>

@@ -37,3 +37,30 @@ export async function getWatchProviders(tmdbId) {
   const data = await get(`/movie/${tmdbId}/watch/providers`);
   return data.results?.US ?? null;
 }
+
+export async function findPerson(name) {
+  const data = await get("/search/person", { query: name, language: "en-US" });
+  return data.results?.[0] ?? null;
+}
+
+// Full director filmography (released films only), for "watch ahead" on the
+// currently-airing series - the podcast may not have covered these yet.
+export async function getDirectorFilmography(personId) {
+  const data = await get(`/person/${personId}/movie_credits`);
+  const today = new Date();
+  return (data.crew ?? [])
+    .filter(
+      (c) =>
+        c.job === "Director" &&
+        c.release_date &&
+        new Date(c.release_date) <= today &&
+        (c.vote_count ?? 0) >= 200
+    )
+    .map((c) => ({
+      title: c.title,
+      year: Number(c.release_date.slice(0, 4)),
+      tmdbId: c.id,
+      releaseDate: c.release_date,
+    }))
+    .sort((a, b) => a.releaseDate.localeCompare(b.releaseDate));
+}

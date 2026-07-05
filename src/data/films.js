@@ -186,6 +186,7 @@ export const filmsBySeries = {
     { title: "As Good as It Gets", year: 1997 },
     { title: "Spanglish", year: 2004 },
     { title: "How Do You Know", year: 2010 },
+    { title: "Ella McCay", year: 2025 },
   ],
   "the-podcastibles": [
     { title: "The Iron Giant", year: 1999 },
@@ -209,6 +210,7 @@ export const filmsBySeries = {
     { title: "Taking Woodstock", year: 2009 },
     { title: "Life of Pi", year: 2012 },
     { title: "Billy Lynn's Long Halftime Walk", year: 2016 },
+    { title: "Chosen", year: 2001 },
   ],
   "somethings-podda-cast": [
     { title: "The Parent Trap", year: 1998 },
@@ -281,6 +283,8 @@ export const filmsBySeries = {
     { title: "The Manchurian Candidate", year: 2004 },
     { title: "Rachel Getting Married", year: 2008 },
     { title: "Ricki and the Flash", year: 2015 },
+    { title: "A Master Builder", year: 2014 },
+    { title: "Justin Timberlake + The Tennessee Kids", year: 2016 },
   ],
   "mad-pod-fury-cast": [
     { title: "Mad Max", year: 1979 },
@@ -409,6 +413,7 @@ export const filmsBySeries = {
     { title: "Drag Me to Hell", year: 2009 },
     { title: "Oz the Great and Powerful", year: 2013 },
     { title: "Doctor Strange in the Multiverse of Madness", year: 2022 },
+    { title: "Send Help", year: 2026 },
   ],
   "pod-that-jazzcast": [
     { title: "Sweet Charity", year: 1969 },
@@ -561,6 +566,7 @@ export const filmsBySeries = {
     { title: "Hook", year: 1991 },
     { title: "Jurassic Park", year: 1993 },
     { title: "Schindler's List", year: 1993 },
+    { title: "Disclosure Day", year: 2026 },
   ],
   "pod-times-at-ridgemont-cast": [
     { title: "Fast Times at Ridgemont High", year: 1982 },
