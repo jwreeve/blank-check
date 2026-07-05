@@ -726,3 +726,13 @@
   .tv-dial-channel { right: 48px; }
   .tv-speaker-grille { display: none; }
 }
+
+/* The Buy Me a Coffee widget (index.html) renders as a static inline
+   element wherever its script tag sits in the DOM, outside React's tree -
+   float it in place so it's always visible regardless of scroll. */
+.bmc-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 10;
+}
