@@ -1,3 +1,12 @@
+function VCRButton({ className = "", icon, label, hint, onClick }) {
+  return (
+    <button className={`vcr-btn ${className}`} onClick={onClick} data-tooltip={hint}>
+      <span className="vcr-btn-icon">{icon}</span>
+      <span className="vcr-btn-label">{label}</span>
+    </button>
+  );
+}
+
 export default function VCRDeck({
   playing,
   channelNumber,
@@ -27,21 +36,23 @@ export default function VCRDeck({
       </div>
 
       <div className="vcr-buttons">
-        <button className="vcr-btn" onClick={onPrev} aria-label="Rewind to previous series">
-          ⏪
-        </button>
-        <button className="vcr-btn vcr-btn-play" onClick={onPlay} aria-label="Play">
-          ▶
-        </button>
-        <button className="vcr-btn" onClick={onNext} aria-label="Fast-forward to next series">
-          ⏩
-        </button>
-        <button className="vcr-btn" onClick={onStop} aria-label="Stop">
-          ⏹
-        </button>
-        <button className="vcr-btn vcr-btn-eject" onClick={onEject} aria-label="Eject">
-          ⏏
-        </button>
+        <VCRButton icon="⏪" label="Rewind" hint="Previous series" onClick={onPrev} />
+        <VCRButton
+          className="vcr-btn-play"
+          icon="▶"
+          label="Play"
+          hint="Watch this series"
+          onClick={onPlay}
+        />
+        <VCRButton icon="⏩" label="F. Fwd" hint="Next series" onClick={onNext} />
+        <VCRButton icon="⏹" label="Stop" hint="Back to guide" onClick={onStop} />
+        <VCRButton
+          className="vcr-btn-eject"
+          icon="⏏"
+          label="Eject"
+          hint="Return home"
+          onClick={onEject}
+        />
       </div>
     </div>
   );
