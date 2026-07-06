@@ -65,12 +65,14 @@ export default function App() {
   const channelKey = view === "playing" ? selected.id : view;
 
   return (
-    <PorchScene>
-      <header className="page-header">
-        <h1>Blank Check</h1>
-        <p className="page-subtitle">Find where to stream every film from every director series</p>
-      </header>
-
+    <PorchScene
+      header={
+        <header className="page-header">
+          <h1>Blank Check Porch TV</h1>
+          <p className="page-subtitle">Where to stream every available film from every director series</p>
+        </header>
+      }
+    >
       <VCRDeck
         playing={view === "playing"}
         ejecting={ejecting}
