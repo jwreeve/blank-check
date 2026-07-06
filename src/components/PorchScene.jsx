@@ -24,6 +24,10 @@ const ZOOM_TARGET = 1 / REST_SCALE;
 const BMC_REST_BOTTOM = 250;
 const BMC_END_BOTTOM = 132;
 
+// Below this width, the coffee button docks centered under the TV instead
+// of in the right-hand column with the header/disclaimer.
+const MOBILE_BREAKPOINT = 640;
+
 function lerp(a, b, t) {
   return a + (b - a) * t;
 }
@@ -75,15 +79,37 @@ export default function PorchScene({ header, children }) {
 
   // Keep the (React-external) coffee button clear of the disclaimer as it
   // docks into the corner beneath it, and keep it hidden entirely until the
-  // walk-up has essentially finished.
+  // walk-up has essentially finished. On narrow viewports it docks centered
+  // under the TV instead, in the gap above the disclaimer — measured live
+  // off the actual DOM rects so it holds up at any mobile screen size.
   useEffect(() => {
     const btn = document.querySelector(".bmc-btn");
     if (!btn) return;
-    btn.style.bottom = `${lerp(BMC_REST_BOTTOM, BMC_END_BOTTOM, t)}px`;
+
+    if (vw <= MOBILE_BREAKPOINT) {
+      const stage = document.querySelector(".porch-stage");
+      const cluster = document.querySelector(".bottom-cluster");
+      const btnRect = btn.getBoundingClientRect();
+      if (stage && cluster) {
+        const stageBottom = stage.getBoundingClientRect().bottom;
+        const clusterTop = cluster.getBoundingClientRect().top;
+        const centerY = (stageBottom + clusterTop) / 2;
+        btn.style.left = "50%";
+        btn.style.right = "auto";
+        btn.style.transform = "translateX(-50%)";
+        btn.style.bottom = `${vh - centerY - btnRect.height / 2}px`;
+      }
+    } else {
+      btn.style.left = "auto";
+      btn.style.transform = "none";
+      btn.style.right = "16px";
+      btn.style.bottom = `${lerp(BMC_REST_BOTTOM, BMC_END_BOTTOM, t)}px`;
+    }
+
     const btnOpacity = Math.max(0, Math.min(1, (t - 0.9) / 0.1));
     btn.style.opacity = btnOpacity;
     btn.style.pointerEvents = btnOpacity > 0.5 ? "auto" : "none";
-  }, [t]);
+  }, [t, vw, vh]);
 
   return (
     <div className="porch-scene" style={{ height: `${(1 + ZOOM_RANGE) * 100}vh` }}>

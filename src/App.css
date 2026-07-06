@@ -52,8 +52,8 @@ body {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 16px;
+  gap: 24px;
+  padding: 20px;
   border-radius: 10px;
   cursor: pointer;
   background: #111;
@@ -73,9 +73,9 @@ body {
   background: rgba(255, 255, 255, 0.06);
   color: #7CFF9E;
   font-family: "VT323", ui-monospace, monospace;
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   letter-spacing: 0.05em;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 4px;
 }
 
@@ -89,8 +89,8 @@ body {
 }
 
 .now-showing-media {
-  width: 96px;
-  height: 96px;
+  width: 132px;
+  height: 132px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -108,20 +108,21 @@ body {
 }
 
 .now-showing-info {
+  flex: 1;
   min-width: 0;
 }
 
 .now-showing-title {
-  margin-top: 6px;
-  font-size: 1.1rem;
+  margin-top: 8px;
+  font-size: 1.35rem;
   font-weight: 700;
   color: #fff;
   line-height: 1.2;
 }
 
 .now-showing-director {
-  margin-top: 4px;
-  font-size: 0.85rem;
+  margin-top: 5px;
+  font-size: 1rem;
   color: #ccc;
 }
 
@@ -130,8 +131,8 @@ body {
 .guide-entry {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 20px 22px;
+  gap: 20px;
+  padding: 24px 26px;
   background: #0a0f0b;
   border: 1px solid rgba(124, 255, 158, 0.2);
   border-radius: 10px;
@@ -145,7 +146,7 @@ body {
 }
 
 .guide-entry-icon {
-  font-size: 1.75rem;
+  font-size: 2.2rem;
   flex-shrink: 0;
 }
 
@@ -156,14 +157,14 @@ body {
 
 .guide-entry-title {
   font-family: "VT323", ui-monospace, monospace;
-  font-size: 1.4rem;
+  font-size: 1.65rem;
   letter-spacing: 0.04em;
   color: #7CFF9E;
 }
 
 .guide-entry-subtitle {
-  margin-top: 2px;
-  font-size: 0.85rem;
+  margin-top: 3px;
+  font-size: 0.95rem;
   color: #7a9a86;
 }
 
