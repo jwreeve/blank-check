@@ -95,35 +95,72 @@ export default function PorchScene({ header, children }) {
   // walk-up has essentially finished. On narrow viewports it docks centered
   // under the TV instead, in the gap above the disclaimer — measured live
   // off the actual DOM rects so it holds up at any mobile screen size.
+  //
+  // Also re-measures on raw scroll/resize events, not just when `t` changes:
+  // `t` clamps at 1 once fully zoomed in, but on iOS, forcing a bit more
+  // scroll past that point can still release the sticky TV container
+  // (rubber-band overscroll) and shift it on screen even though `t` itself
+  // hasn't moved — without this, the button's last (now-stale) position
+  // stays stranded on top of the TV. `t` stays in the dependency array
+  // (rather than read via a ref) so this closure is always rebuilt with the
+  // exact value React just rendered — a ref updated separately would race
+  // against this effect's own rAF-scheduled reads of it.
   useEffect(() => {
-    const btn = document.querySelector(".bmc-btn");
-    if (!btn) return;
+    let raf = null;
+    const update = () => {
+      raf = null;
+      // Looked up fresh each call (rather than once, outside update) since
+      // the widget script (index.html) injects this button asynchronously
+      // and may not exist yet on the very first call.
+      const btn = document.querySelector(".bmc-btn");
+      if (!btn) return;
 
-    if (isMobile) {
-      const stage = document.querySelector(".porch-stage");
-      const cluster = document.querySelector(".bottom-cluster");
-      if (stage && cluster) {
-        const stageBottom = stage.getBoundingClientRect().bottom;
-        const clusterTop = cluster.getBoundingClientRect().top;
-        const centerY = (stageBottom + clusterTop) / 2;
-        btn.style.left = "50%";
-        btn.style.right = "auto";
-        btn.style.transform = `translateX(-50%) scale(${BMC_MOBILE_SCALE})`;
-        // Scaling happens around the box's own (unscaled) center, so the
-        // bottom offset only needs the natural height to land centered.
-        btn.style.bottom = `${vh - centerY - BMC_NATURAL_HEIGHT / 2}px`;
+      const mobile = window.innerWidth <= MOBILE_BREAKPOINT;
+
+      if (mobile) {
+        const stage = document.querySelector(".porch-stage");
+        const cluster = document.querySelector(".bottom-cluster");
+        if (stage && cluster) {
+          const stageBottom = stage.getBoundingClientRect().bottom;
+          const clusterTop = cluster.getBoundingClientRect().top;
+          const centerY = (stageBottom + clusterTop) / 2;
+          btn.style.left = "50%";
+          btn.style.right = "auto";
+          btn.style.transform = `translateX(-50%) scale(${BMC_MOBILE_SCALE})`;
+          // Scaling happens around the box's own (unscaled) center, so the
+          // bottom offset only needs the natural height to land centered.
+          btn.style.bottom = `${window.innerHeight - centerY - BMC_NATURAL_HEIGHT / 2}px`;
+        }
+      } else {
+        btn.style.left = "auto";
+        btn.style.transform = "none";
+        btn.style.right = "16px";
+        btn.style.bottom = `${lerp(BMC_REST_BOTTOM, BMC_END_BOTTOM, t)}px`;
       }
-    } else {
-      btn.style.left = "auto";
-      btn.style.transform = "none";
-      btn.style.right = "16px";
-      btn.style.bottom = `${lerp(BMC_REST_BOTTOM, BMC_END_BOTTOM, t)}px`;
-    }
 
-    const btnOpacity = Math.max(0, Math.min(1, (t - 0.9) / 0.1));
-    btn.style.opacity = btnOpacity;
-    btn.style.pointerEvents = btnOpacity > 0.5 ? "auto" : "none";
-  }, [t, vw, vh, isMobile]);
+      const btnOpacity = Math.max(0, Math.min(1, (t - 0.9) / 0.1));
+      btn.style.opacity = btnOpacity;
+      btn.style.pointerEvents = btnOpacity > 0.5 ? "auto" : "none";
+    };
+
+    const onScroll = () => {
+      if (raf == null) raf = requestAnimationFrame(update);
+    };
+
+    update();
+    // Retry a few times in case the widget script hasn't injected the
+    // button yet on first paint.
+    const retryTimers = [100, 500, 1500].map((ms) => setTimeout(update, ms));
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+      retryTimers.forEach(clearTimeout);
+    };
+  }, [t]);
 
   return (
     <div className="porch-scene" style={{ height: `${(1 + ZOOM_RANGE) * 100}dvh` }}>
