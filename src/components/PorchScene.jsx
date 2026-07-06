@@ -24,8 +24,16 @@ const ZOOM_TARGET = 1 / REST_SCALE;
 const BMC_REST_BOTTOM = 250;
 const BMC_END_BOTTOM = 132;
 
+// The widget's own natural (unscaled) rendered height — used so the
+// mobile centering math stays correct even though the button is shrunk via
+// transform: scale() there (scaling around the box's own center leaves that
+// center in place, so only the *unscaled* height matters for positioning).
+const BMC_NATURAL_HEIGHT = 60;
+const BMC_MOBILE_SCALE = 0.72;
+
 // Below this width, the coffee button docks centered under the TV instead
-// of in the right-hand column with the header/disclaimer.
+// of in the right-hand column with the header/disclaimer, and the TV
+// settles dead-center instead of shifted left for that column.
 const MOBILE_BREAKPOINT = 640;
 
 function lerp(a, b, t) {
@@ -46,8 +54,13 @@ export default function PorchScene({ header, children }) {
 
   const vw = window.innerWidth;
   const vh = window.innerHeight;
+  const isMobile = vw <= MOBILE_BREAKPOINT;
   const anchorPx = { x: (ANCHOR.x / 100) * vw, y: (ANCHOR.y / 100) * vh };
-  const settlePx = { x: (SETTLE.x / 100) * vw, y: (SETTLE.y / 100) * vh };
+  // On mobile there's no right-hand header/disclaimer column sharing the
+  // screen with the TV (they're stacked above/below instead), so it settles
+  // dead-center there rather than shifted left.
+  const settleX = isMobile ? 50 : SETTLE.x;
+  const settlePx = { x: (settleX / 100) * vw, y: (SETTLE.y / 100) * vh };
 
   // Pan so the anchor point stays put while zoom==1, then glides toward
   // the settle point as the scene zooms in — see derivation: for a point P,
@@ -86,18 +99,19 @@ export default function PorchScene({ header, children }) {
     const btn = document.querySelector(".bmc-btn");
     if (!btn) return;
 
-    if (vw <= MOBILE_BREAKPOINT) {
+    if (isMobile) {
       const stage = document.querySelector(".porch-stage");
       const cluster = document.querySelector(".bottom-cluster");
-      const btnRect = btn.getBoundingClientRect();
       if (stage && cluster) {
         const stageBottom = stage.getBoundingClientRect().bottom;
         const clusterTop = cluster.getBoundingClientRect().top;
         const centerY = (stageBottom + clusterTop) / 2;
         btn.style.left = "50%";
         btn.style.right = "auto";
-        btn.style.transform = "translateX(-50%)";
-        btn.style.bottom = `${vh - centerY - btnRect.height / 2}px`;
+        btn.style.transform = `translateX(-50%) scale(${BMC_MOBILE_SCALE})`;
+        // Scaling happens around the box's own (unscaled) center, so the
+        // bottom offset only needs the natural height to land centered.
+        btn.style.bottom = `${vh - centerY - BMC_NATURAL_HEIGHT / 2}px`;
       }
     } else {
       btn.style.left = "auto";
@@ -109,7 +123,7 @@ export default function PorchScene({ header, children }) {
     const btnOpacity = Math.max(0, Math.min(1, (t - 0.9) / 0.1));
     btn.style.opacity = btnOpacity;
     btn.style.pointerEvents = btnOpacity > 0.5 ? "auto" : "none";
-  }, [t, vw, vh]);
+  }, [t, vw, vh, isMobile]);
 
   return (
     <div className="porch-scene" style={{ height: `${(1 + ZOOM_RANGE) * 100}vh` }}>

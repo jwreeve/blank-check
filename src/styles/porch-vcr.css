@@ -174,7 +174,7 @@
 
 .tv-unit {
   width: 100%;
-  max-width: 500px;
+  max-width: 550px;
   flex-shrink: 0;
   margin: 0 auto;
 }
@@ -217,11 +217,12 @@
 
 .tv-screen {
   position: relative;
+  margin: 0 auto;
   border-radius: 14px 14px 22px 22px / 10px 10px 32px 32px;
   overflow: hidden;
   background: #0a0a0a;
   aspect-ratio: 4 / 3;
-  max-height: 46vh;
+  max-height: 64vh;
   animation: tv-flicker 6s ease-in-out infinite;
 }
 
@@ -350,7 +351,7 @@
   z-index: 0;
   flex-shrink: 0;
   width: 78%;
-  max-width: 390px;
+  max-width: 470px;
   height: 16px;
   margin: -5px auto 0;
   background: linear-gradient(180deg, #d3a53a, #a97e1f);
@@ -379,7 +380,7 @@
   z-index: 3;
   flex-shrink: 0;
   width: 92%;
-  max-width: 520px;
+  max-width: 620px;
   background: linear-gradient(160deg, var(--deck-metal-light), var(--deck-metal));
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 7px;

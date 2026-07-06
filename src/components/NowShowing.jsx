@@ -17,6 +17,7 @@ export default function NowShowing({ series, onClick }) {
         <h2 className="now-showing-title">{series.director}</h2>
         <p className="now-showing-director">{series.title}</p>
       </div>
+      <span className="now-showing-arrow">›</span>
     </div>
   );
 }

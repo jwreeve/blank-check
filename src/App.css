@@ -11,7 +11,7 @@ body {
 }
 
 .channel-guide {
-  padding: 20px 16px 40px;
+  padding: 24px 16px;
 }
 
 .channel-guide-home {
@@ -89,8 +89,8 @@ body {
 }
 
 .now-showing-media {
-  width: 132px;
-  height: 132px;
+  width: 168px;
+  height: 168px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -113,17 +113,23 @@ body {
 }
 
 .now-showing-title {
-  margin-top: 8px;
-  font-size: 1.35rem;
+  margin-top: 10px;
+  font-size: 1.6rem;
   font-weight: 700;
   color: #fff;
   line-height: 1.2;
 }
 
 .now-showing-director {
-  margin-top: 5px;
-  font-size: 1rem;
+  margin-top: 6px;
+  font-size: 1.1rem;
   color: #ccc;
+}
+
+.now-showing-arrow {
+  color: #555;
+  font-size: 1.4rem;
+  flex-shrink: 0;
 }
 
 /* ── Channel Guide entry (home screen's second option) ── */
@@ -475,5 +481,32 @@ body {
   .now-showing-media {
     width: 100%;
     height: 180px;
+  }
+
+  .now-showing-arrow {
+    display: none;
+  }
+
+  /* Shrink to a compact button instead of a full hero row — the bigger
+     card doesn't fit the narrower screen as well as it does on desktop. */
+  .guide-entry {
+    gap: 10px;
+    padding: 10px 14px;
+  }
+
+  .guide-entry-icon {
+    font-size: 1.3rem;
+  }
+
+  .guide-entry-title {
+    font-size: 1.05rem;
+  }
+
+  .guide-entry-subtitle {
+    display: none;
+  }
+
+  .guide-entry-arrow {
+    font-size: 1.1rem;
   }
 }
