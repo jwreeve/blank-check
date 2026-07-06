@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { track } from "@vercel/analytics";
 import { filmsBySeries } from "../data/films";
 import { useStreamingData } from "../hooks/useStreamingData";
 import { useDirectorFilmography } from "../hooks/useDirectorFilmography";
@@ -8,7 +9,7 @@ function normalizeTitle(title) {
   return title.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
-function ProviderBadge({ provider, watchLink }) {
+function ProviderBadge({ provider, watchLink, filmTitle }) {
   return (
     <a
       href={watchLink ?? "#"}
@@ -16,6 +17,7 @@ function ProviderBadge({ provider, watchLink }) {
       rel="noopener noreferrer"
       className="provider-badge"
       title={provider.provider_name}
+      onClick={() => track("click_provider", { provider: provider.provider_name, film: filmTitle })}
     >
       <img
         src={`${IMG_BASE}${provider.logo_path}`}
@@ -56,7 +58,12 @@ function FilmRow({ film }) {
       <div className="film-providers">
         {unique.length > 0 ? (
           unique.map((p) => (
-            <ProviderBadge key={p.provider_id} provider={p} watchLink={watchLink} />
+            <ProviderBadge
+              key={p.provider_id}
+              provider={p}
+              watchLink={watchLink}
+              filmTitle={film.title}
+            />
           ))
         ) : (
           <span className="film-unavailable">Not streaming</span>
@@ -103,6 +110,7 @@ export default function SeriesPanel({ series, isCurrent }) {
             target="_blank"
             rel="noopener noreferrer"
             className="panel-series-link"
+            onClick={() => track("view_series_external", { director: series.director, title: series.title })}
           >
             View series on Blank Check →
           </a>

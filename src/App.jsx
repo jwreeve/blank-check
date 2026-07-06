@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { track } from "@vercel/analytics";
 import { series } from "./data/series";
 import NowShowing from "./components/NowShowing";
 import ChannelGuideEntry from "./components/ChannelGuideEntry";
@@ -19,11 +20,13 @@ export default function App() {
   const index = selected ? series.findIndex((s) => s.id === selected.id) : -1;
 
   function play(s) {
+    track("play_series", { director: s.director, title: s.title });
     setSelected(s);
     setView("playing");
   }
 
   function openGuide() {
+    track("open_channel_guide");
     setSelected(null);
     setView("guide");
   }
