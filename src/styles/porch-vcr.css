@@ -18,7 +18,11 @@
 .porch-viewport {
   position: sticky;
   top: 0;
-  height: 100vh;
+  /* dvh (not vh) so this stays in sync with the scroll math in
+     PorchScene.jsx as iOS Safari's address bar collapses/expands —
+     plain vh is pinned to the chrome-hidden size and drifts out of
+     sync mid-scroll, which is what caused the "jump" at the bottom. */
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -222,7 +226,7 @@
   overflow: hidden;
   background: #0a0a0a;
   aspect-ratio: 4 / 3;
-  max-height: 64vh;
+  max-height: 64dvh;
   animation: tv-flicker 6s ease-in-out infinite;
 }
 

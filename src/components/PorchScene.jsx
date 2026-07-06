@@ -126,7 +126,7 @@ export default function PorchScene({ header, children }) {
   }, [t, vw, vh, isMobile]);
 
   return (
-    <div className="porch-scene" style={{ height: `${(1 + ZOOM_RANGE) * 100}vh` }}>
+    <div className="porch-scene" style={{ height: `${(1 + ZOOM_RANGE) * 100}dvh` }}>
       <div className="porch-viewport">
         <div
           className="porch-zoom"

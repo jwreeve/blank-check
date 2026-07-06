@@ -2,12 +2,20 @@
   box-sizing: border-box;
 }
 
+html {
+  /* Stop iOS Safari's rubber-band bounce once the scroll-driven walk-up
+     animation reaches its end — without this, overscrolling past the
+     bottom shows blank space and yanks the sticky TV out of place. */
+  overscroll-behavior-y: none;
+}
+
 body {
   margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
   background: #e9e4d6;
   color: #e8e8e8;
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
 }
 
 #root {
