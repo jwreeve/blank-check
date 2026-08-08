@@ -108,8 +108,8 @@ export default function App() {
     <PorchScene
       header={
         <header className="page-header">
-          <h1>Blank Check Porch TV</h1>
-          <p className="page-subtitle">Where to stream every available film from every director series</p>
+          <h1>Porch Movies</h1>
+          <p className="page-subtitle">Where to stream every available film from every Blank Check director series</p>
         </header>
       }
     >
