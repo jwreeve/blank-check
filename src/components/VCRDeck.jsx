@@ -36,7 +36,7 @@ export default function VCRDeck({
       </div>
 
       <div className="vcr-buttons">
-        <VCRButton icon="⏪" label="Rewind" hint="Previous series" onClick={onPrev} />
+        <VCRButton icon="⏪" label="Rewind" hint="Previous series" onClick={onNext} />
         <VCRButton
           className="vcr-btn-play"
           icon="▶"
@@ -44,7 +44,7 @@ export default function VCRDeck({
           hint="Watch this series"
           onClick={onPlay}
         />
-        <VCRButton icon="⏩" label="F. Fwd" hint="Next series" onClick={onNext} />
+        <VCRButton icon="⏩" label="F.Fwd" hint="Next series" onClick={onPrev} />
         <VCRButton icon="⏹" label="Stop" hint="Back to guide" onClick={onStop} />
         <VCRButton
           className="vcr-btn-eject"
