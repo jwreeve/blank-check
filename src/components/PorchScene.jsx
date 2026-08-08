@@ -222,12 +222,12 @@ export default function PorchScene({ header, children }) {
           >
             <h2>Disclaimer</h2>
             <p>
-              This app/website is an independent project created by Jonathan Reeve and is
+              This app/website is an independent project created by John A Haverty LLC and is
               not affiliated with, endorsed by, or sponsored by the Blank Check podcast or
               Blank Check Productions. All references to Blank Check are made for
               identification and commentary purposes only.
             </p>
-            <p>This app and its content are © 2026 Jonathan Reeve. All rights reserved.</p>
+            <p>This app and its content are © 2026 John A Haverty LLC. All rights reserved.</p>
           </div>
         </div>
       </div>
