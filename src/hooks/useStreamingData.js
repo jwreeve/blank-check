@@ -2,17 +2,15 @@ import { useState, useEffect } from "react";
 import { searchMovie, getWatchProviders } from "../services/tmdb";
 
 export function useStreamingData(films) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // Keyed by the exact `films` reference the fetch was for, so loading/data/
+  // error can be derived during render instead of reset with a synchronous
+  // setState call at the top of the effect (that pattern forces React into
+  // an extra render pass every time films changes).
+  const [result, setResult] = useState({ films: null, data: null, error: null });
 
   useEffect(() => {
     if (!films || films.length === 0) return;
     let cancelled = false;
-
-    setLoading(true);
-    setData(null);
-    setError(null);
 
     Promise.all(
       films.map(async (film) => {
@@ -27,17 +25,11 @@ export function useStreamingData(films) {
         }
       })
     )
-      .then((results) => {
-        if (!cancelled) {
-          setData(results);
-          setLoading(false);
-        }
+      .then((data) => {
+        if (!cancelled) setResult({ films, data, error: null });
       })
       .catch((e) => {
-        if (!cancelled) {
-          setError(e.message);
-          setLoading(false);
-        }
+        if (!cancelled) setResult({ films, data: null, error: e.message });
       });
 
     return () => {
@@ -45,5 +37,10 @@ export function useStreamingData(films) {
     };
   }, [films]);
 
-  return { data, loading, error };
+  const current = result.films === films;
+  return {
+    data: current ? result.data : null,
+    error: current ? result.error : null,
+    loading: !!films && films.length > 0 && !current,
+  };
 }
