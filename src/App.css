@@ -134,16 +134,23 @@ body {
 
 /* ── Channel Guide entry (home screen's second option) ── */
 
+.guide-entry-row {
+  display: flex;
+  gap: 16px;
+}
+
 .guide-entry {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 24px 26px;
+  gap: 14px;
+  padding: 20px 18px;
   background: #0a0f0b;
   border: 1px solid rgba(124, 255, 158, 0.2);
   border-radius: 10px;
   cursor: pointer;
   transition: background 0.15s ease, transform 0.15s ease;
+  flex: 1;
+  min-width: 0;
 }
 
 .guide-entry:hover {
@@ -152,7 +159,7 @@ body {
 }
 
 .guide-entry-icon {
-  font-size: 2.2rem;
+  font-size: 1.9rem;
   flex-shrink: 0;
 }
 
@@ -163,14 +170,14 @@ body {
 
 .guide-entry-title {
   font-family: "VT323", ui-monospace, monospace;
-  font-size: 1.65rem;
+  font-size: 1.4rem;
   letter-spacing: 0.04em;
   color: #7CFF9E;
 }
 
 .guide-entry-subtitle {
   margin-top: 3px;
-  font-size: 0.95rem;
+  font-size: 0.8rem;
   color: #7a9a86;
 }
 
@@ -266,6 +273,13 @@ body {
   background: #111;
 }
 
+.tv-guide-thumb-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
 .tv-guide-info {
   display: flex;
   flex-direction: column;
@@ -314,6 +328,13 @@ body {
   object-fit: cover;
   flex-shrink: 0;
   background: #111;
+}
+
+.panel-thumb-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
 }
 
 .panel-header-text {
@@ -499,17 +520,21 @@ body {
 
   /* Shrink to a compact button instead of a full hero row — the bigger
      card doesn't fit the narrower screen as well as it does on desktop. */
+  .guide-entry-row {
+    gap: 8px;
+  }
+
   .guide-entry {
-    gap: 10px;
-    padding: 10px 14px;
+    gap: 8px;
+    padding: 10px 12px;
   }
 
   .guide-entry-icon {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
 
   .guide-entry-title {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
   }
 
   .guide-entry-subtitle {
@@ -517,6 +542,6 @@ body {
   }
 
   .guide-entry-arrow {
-    font-size: 1.1rem;
+    display: none;
   }
 }
