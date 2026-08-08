@@ -28,21 +28,37 @@ function ProviderBadge({ provider, watchLink, filmTitle }) {
   );
 }
 
-function FilmRow({ film }) {
-  const providers = [
-    ...(film.providers?.flatrate ?? []),
-    ...(film.providers?.free ?? []),
-    ...(film.providers?.ads ?? []),
-    ...(film.providers?.rent ?? []),
-    ...(film.providers?.buy ?? []),
-  ];
-
+function dedupeProviders(providers) {
   const seen = new Set();
-  const unique = providers.filter((p) => {
+  return providers.filter((p) => {
     if (seen.has(p.provider_id)) return false;
     seen.add(p.provider_id);
     return true;
   });
+}
+
+function ProviderRow({ label, providers, watchLink, filmTitle }) {
+  if (providers.length === 0) return null;
+  return (
+    <div className="film-providers">
+      <span className="film-providers-label">{label}</span>
+      {providers.map((p) => (
+        <ProviderBadge key={p.provider_id} provider={p} watchLink={watchLink} filmTitle={filmTitle} />
+      ))}
+    </div>
+  );
+}
+
+function FilmRow({ film }) {
+  const streaming = dedupeProviders([
+    ...(film.providers?.flatrate ?? []),
+    ...(film.providers?.free ?? []),
+    ...(film.providers?.ads ?? []),
+  ]);
+  const purchase = dedupeProviders([
+    ...(film.providers?.rent ?? []),
+    ...(film.providers?.buy ?? []),
+  ]);
 
   const watchLink = film.tmdbId
     ? `https://www.themoviedb.org/movie/${film.tmdbId}/watch?locale=US`
@@ -55,20 +71,14 @@ function FilmRow({ film }) {
         <span className="film-year">{film.year}</span>
         {film.upcoming && <span className="film-upcoming-tag">Not yet covered</span>}
       </div>
-      <div className="film-providers">
-        {unique.length > 0 ? (
-          unique.map((p) => (
-            <ProviderBadge
-              key={p.provider_id}
-              provider={p}
-              watchLink={watchLink}
-              filmTitle={film.title}
-            />
-          ))
-        ) : (
-          <span className="film-unavailable">Not streaming</span>
-        )}
-      </div>
+      {streaming.length > 0 || purchase.length > 0 ? (
+        <>
+          <ProviderRow label="Stream" providers={streaming} watchLink={watchLink} filmTitle={film.title} />
+          <ProviderRow label="Buy/Rent" providers={purchase} watchLink={watchLink} filmTitle={film.title} />
+        </>
+      ) : (
+        <span className="film-unavailable">Not streaming</span>
+      )}
     </div>
   );
 }

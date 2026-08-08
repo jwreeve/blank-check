@@ -393,9 +393,19 @@ body {
 
 .film-providers {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 6px;
   max-width: 222px;
+}
+
+.film-providers-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #666;
+  width: 100%;
 }
 
 .provider-badge {
