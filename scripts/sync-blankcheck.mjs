@@ -393,11 +393,14 @@ async function main() {
     for (const item of toAppendCurrent) {
       const guess = stripGuest(item.title);
       const { year, verified, canonicalTitle } = await lookupYear(guess, topDirector);
-      const title = verified ? canonicalTitle : guess;
-      resolved.push({ title, year });
-      report.push(`+ film "${title}"${year ? ` (${year})` : ""} in ${topId}${verified ? "" : " [year unverified - check manually]"}`);
+      if (!verified) {
+        report.push(`? "${item.title}" - filed under ${topId} but director couldn't be verified for "${guess}"; not added`);
+        continue;
+      }
+      resolved.push({ title: canonicalTitle, year });
+      report.push(`+ film "${canonicalTitle}"${year ? ` (${year})` : ""} in ${topId}`);
     }
-    filmsSrc = appendFilms(filmsSrc, topId, resolved);
+    if (resolved.length > 0) filmsSrc = appendFilms(filmsSrc, topId, resolved);
   }
 
   if (toAppendNewSeries.length > 0 && newest) {
@@ -426,11 +429,14 @@ async function main() {
     for (const item of toAppendNewSeries) {
       const guess = stripGuest(item.title);
       const { year, verified, canonicalTitle } = await lookupYear(guess, newSeriesDirector);
-      const title = verified ? canonicalTitle : guess;
-      resolved.push({ title, year });
-      report.push(`+ film "${title}"${year ? ` (${year})` : ""} in ${newest.slug}${verified ? "" : " [year unverified - check manually]"}`);
+      if (!verified) {
+        report.push(`? "${item.title}" - filed under ${newest.slug} but director couldn't be verified for "${guess}"; not added`);
+        continue;
+      }
+      resolved.push({ title: canonicalTitle, year });
+      report.push(`+ film "${canonicalTitle}"${year ? ` (${year})` : ""} in ${newest.slug}`);
     }
-    filmsSrc = appendFilms(filmsSrc, newest.slug, resolved);
+    if (resolved.length > 0) filmsSrc = appendFilms(filmsSrc, newest.slug, resolved);
   }
 
   for (const item of skipped) {

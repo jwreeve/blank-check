@@ -2,6 +2,10 @@ export const filmsBySeries = {
   "podd-c": [
     { title: "Finding Nemo", year: 2003 },
     { title: "WALL-E", year: 2008 },
+    { title: "John Carter", year: 2012 },
+    { title: "Finding Dory", year: 2016 },
+    { title: "In the Blink of an Eye", year: 2026 },
+    { title: "Toy Story 5", year: 2026 },
   ],
   "podnic-at-hanging-cast": [
     { title: "The Cars That Ate Paris", year: 1974 },
@@ -154,6 +158,7 @@ export const filmsBySeries = {
     { title: "Interstellar", year: 2014 },
     { title: "Dunkirk", year: 2017 },
     { title: "Oppenheimer", year: 2023 },
+    { title: "The Odyssey", year: 2026 },
   ],
   "pod-19-the-widowcaster": [
     { title: "The Loveless", year: 1982 },
