@@ -133,7 +133,7 @@ export default function App() {
 
       <TVFrame channelKey={channelKey}>
         {view === "playing" && (
-          <SeriesPanel series={selected} isCurrent={selected.id === current.id} />
+          <SeriesPanel key={selected.id} series={selected} isCurrent={selected.id === current.id} />
         )}
 
         {view === "coming-soon-playing" && <ComingSoonPanel director={selectedDirector} />}

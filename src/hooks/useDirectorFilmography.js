@@ -8,7 +8,10 @@ function looksLikeAPersonName(name) {
 }
 
 export function useDirectorFilmography(directorName, enabled) {
-  const [filmography, setFilmography] = useState(null);
+  // Keyed by the exact `directorName` the fetch was for, so a switch to a
+  // new series can't keep showing the previous director's films while the
+  // new fetch is in flight (same pattern as useStreamingData).
+  const [result, setResult] = useState({ directorName: null, filmography: null });
 
   useEffect(() => {
     if (!enabled || !looksLikeAPersonName(directorName)) return;
@@ -19,7 +22,7 @@ export function useDirectorFilmography(directorName, enabled) {
         const person = await findPerson(directorName);
         if (!person) return;
         const films = await getDirectorFilmography(person.id);
-        if (!cancelled) setFilmography(films);
+        if (!cancelled) setResult({ directorName, filmography: films });
       } catch {
         // Best-effort enrichment - fall back to the curated film list.
       }
@@ -30,5 +33,5 @@ export function useDirectorFilmography(directorName, enabled) {
     };
   }, [directorName, enabled]);
 
-  return filmography;
+  return result.directorName === directorName ? result.filmography : null;
 }
