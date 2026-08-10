@@ -95,7 +95,12 @@ export default function PorchScene({ header, children }) {
   const clusterWidth = lerp(clusterRestWidth, clusterEndWidth, t);
   const clusterRight = lerp(0, 16, t);
   const clusterBottom = lerp(0, 16, t);
-  const discScale = lerp(0.82 * 1.38, 0.68 * 1.38, t);
+  // The larger rest-state size reads fine on desktop, but on mobile the
+  // disclaimer already fills more of the narrow viewport at launch, so it
+  // stays at its original (pre-boost) size there. The zoomed-in end size
+  // is unaffected on both.
+  const discRestScale = isMobile ? 0.82 : 0.82 * 1.38;
+  const discScale = lerp(discRestScale, 0.68 * 1.38, t);
   const discRadius = t > 0.5 ? 10 : 0;
 
   // Keep the (React-external) coffee button clear of the disclaimer as it
