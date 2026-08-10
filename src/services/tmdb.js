@@ -22,15 +22,32 @@ async function get(path, params = {}) {
   return data;
 }
 
+const normalizeTitle = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, "");
+
 export async function searchMovie(title, year) {
   const data = await get("/search/movie", { query: title, year, language: "en-US" });
   const results = data.results ?? [];
   if (results.length === 0) return null;
-  // TMDB doesn't rank results by relevance for stylized/punctuation-heavy
-  // titles (e.g. "WALL-E" surfaces a "WALL·E's Treasures & Trinkets" short
-  // ahead of the actual film), so prefer the most popular match instead of
-  // trusting result order.
-  return results.reduce((best, r) => (r.popularity > best.popularity ? r : best));
+
+  // TMDB's `year` param is a weak hint, not a filter (e.g. searching "Old"
+  // with year=2021 still returns "No Country for Old Men" (2007), which is
+  // more popular than the correct match). Narrow to films actually released
+  // in that year first, then prefer an exact title match, before falling
+  // back to the most popular result among what's left - this also handles
+  // stylized/punctuation-heavy titles (e.g. "WALL-E" surfaces a "WALL·E's
+  // Treasures & Trinkets" short ahead of the actual film).
+  const yearMatches = year
+    ? results.filter((r) => r.release_date?.slice(0, 4) === String(year))
+    : [];
+  const pool = yearMatches.length > 0 ? yearMatches : results;
+
+  const normTitle = normalizeTitle(title);
+  const exactMatches = pool.filter(
+    (r) => normalizeTitle(r.title) === normTitle || normalizeTitle(r.original_title) === normTitle
+  );
+  const candidates = exactMatches.length > 0 ? exactMatches : pool;
+
+  return candidates.reduce((best, r) => (r.popularity > best.popularity ? r : best));
 }
 
 export async function getWatchProviders(tmdbId) {
