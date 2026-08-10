@@ -61,7 +61,6 @@ export function FilmRow({ film }) {
       <div className="film-meta">
         <span className="film-title">{film.title}</span>
         <span className="film-year">{film.year}</span>
-        {film.upcoming && <span className="film-upcoming-tag">Not yet covered</span>}
       </div>
       {streaming.length > 0 || purchase.length > 0 ? (
         <>

@@ -400,18 +400,6 @@ body {
   flex-shrink: 0;
 }
 
-.film-upcoming-tag {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: #e0b04a;
-  background: rgba(224, 176, 74, 0.12);
-  border: 1px solid rgba(224, 176, 74, 0.3);
-  padding: 1px 7px;
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-
 .film-providers {
   display: flex;
   align-items: center;
