@@ -18,6 +18,13 @@ const SETTLE = { x: 41, y: 57 };
 
 const ZOOM_TARGET = 1 / REST_SCALE;
 
+// Once the walk-up completes, the TV (and everything inside it - icons,
+// text) renders this much larger than its natural authored size. Applied
+// only to .porch-stage's own scale, not to `zoom` (which drives the
+// backdrop photo too), so the photo still zooms in at its original rate
+// and only the TV itself ends up bigger.
+const TV_SCALE_BOOST = 1.2;
+
 // The Buy Me a Coffee widget renders outside React's tree (see index.html),
 // so its scroll-linked clearance above the docked disclaimer is applied
 // imperatively rather than through React state.
@@ -51,6 +58,7 @@ export default function PorchScene({ header, children }) {
   const t = ease(progress);
 
   const zoom = lerp(1, ZOOM_TARGET, t);
+  const stageBoost = lerp(1, TV_SCALE_BOOST, t);
 
   const vw = window.innerWidth;
   const vh = window.innerHeight;
@@ -87,7 +95,7 @@ export default function PorchScene({ header, children }) {
   const clusterWidth = lerp(clusterRestWidth, clusterEndWidth, t);
   const clusterRight = lerp(0, 16, t);
   const clusterBottom = lerp(0, 16, t);
-  const discScale = lerp(0.82, 0.68, t);
+  const discScale = lerp(0.82 * 1.38, 0.68 * 1.38, t);
   const discRadius = t > 0.5 ? 10 : 0;
 
   // Keep the (React-external) coffee button clear of the disclaimer as it
@@ -175,7 +183,7 @@ export default function PorchScene({ header, children }) {
             style={{
               left: `${ANCHOR.x}%`,
               top: `${ANCHOR.y}%`,
-              transform: `translate(-50%, -50%) scale(${REST_SCALE})`,
+              transform: `translate(-50%, -50%) scale(${REST_SCALE * stageBoost})`,
               pointerEvents: t > 0.85 ? "auto" : "none",
             }}
           >
