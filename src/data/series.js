@@ -1,6 +1,12 @@
 export const series = [
   // Top 3 most recent series, then ordered by first wiki episode appearance, Porch Classics pinned last
   {
+    id: "podcastfellas",
+    title: "PODCASTFELLAS",
+    director: "Martin Scorsese",
+    image: "https://megaphone.imgix.net/podcasts/c9cd529e-fae9-11f0-9ff5-cba86f8d81d8/image/8e5722474ef424b31b04cfd9c5d04277.png?ixlib=rails-4.3.1&max-w=3000&max-h=3000&fit=crop&auto=format,compress",
+  },
+  {
     id: "podd-c",
     title: "PODD-C",
     director: "Andrew Stanton",
@@ -12,13 +18,13 @@ export const series = [
     director: "Peter Weir",
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/06d5005e-f71f-433f-9088-fc125976ff3a/Podnic-at-Hanging-Cast.png",
   },
+  // Rest ordered by first episode appearance, newest first (reverse chronological)
   {
     id: "we-need-to-pod-about-castvin",
     title: "We Need to Pod About Castvin",
     director: "Lynne Ramsay",
     image: "https://images.squarespace-cdn.com/content/v1/659dc54db8c5a26234919156/247e8815-7251-4a75-8c6e-adc2ae6d95c6/We-Need-To-Pod-About-Castvin.png",
   },
-  // Rest ordered by first episode appearance, newest first (reverse chronological)
   {
     id: "podcast-me-to-hell",
     title: "Podcast Me to Hell",
