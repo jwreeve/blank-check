@@ -220,8 +220,8 @@ export default function PorchScene({ header, children }) {
         >
           {progress < 0.3 && (
             <div className="scroll-hint" style={{ opacity: Math.max(0, 1 - progress / 0.25) }}>
-              <span className="scroll-hint-arrow">↓</span>
-              Scroll down to walk onto the porch.
+              <span className="scroll-hint-arrow">↑</span>
+              Swipe up to walk onto the porch.
             </div>
           )}
 
