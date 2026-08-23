@@ -394,6 +394,12 @@ body {
   color: #e8e8e8;
 }
 
+.film-runtime {
+  font-size: 0.8rem;
+  color: #666;
+  flex-shrink: 0;
+}
+
 .film-year {
   font-size: 0.8rem;
   color: #666;

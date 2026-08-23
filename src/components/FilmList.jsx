@@ -1,6 +1,13 @@
 import { track } from "@vercel/analytics";
 import { IMG_BASE } from "../services/tmdb";
 
+function formatRuntime(minutes) {
+  if (!minutes) return null;
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+
 function dedupeProviders(providers) {
   const seen = new Set();
   return providers.filter((p) => {
@@ -60,7 +67,10 @@ export function FilmRow({ film }) {
     <div className="film-row">
       <div className="film-meta">
         <span className="film-title">{film.title}</span>
-        <span className="film-year">{film.year}</span>
+        <span className="film-year">({film.year})</span>
+        {formatRuntime(film.runtime) && (
+          <span className="film-runtime">{formatRuntime(film.runtime)}</span>
+        )}
       </div>
       {streaming.length > 0 || purchase.length > 0 ? (
         <>

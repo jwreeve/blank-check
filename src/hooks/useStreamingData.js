@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { searchMovie, getWatchProviders } from "../services/tmdb";
+import { searchMovie, getMovieDetails } from "../services/tmdb";
 
 export function useStreamingData(films) {
   // Keyed by the exact `films` reference the fetch was for, so loading/data/
@@ -17,11 +17,11 @@ export function useStreamingData(films) {
         const { title, year } = film;
         try {
           const movie = await searchMovie(title, year);
-          if (!movie) return { ...film, providers: null, tmdbId: null };
-          const providers = await getWatchProviders(movie.id);
-          return { ...film, providers, tmdbId: movie.id };
+          if (!movie) return { ...film, providers: null, tmdbId: null, runtime: null };
+          const { runtime, providers } = await getMovieDetails(movie.id);
+          return { ...film, providers, tmdbId: movie.id, runtime };
         } catch (e) {
-          return { ...film, providers: null, tmdbId: null, fetchError: e.message };
+          return { ...film, providers: null, tmdbId: null, runtime: null, fetchError: e.message };
         }
       })
     )

@@ -50,9 +50,12 @@ export async function searchMovie(title, year) {
   return candidates.reduce((best, r) => (r.popularity > best.popularity ? r : best));
 }
 
-export async function getWatchProviders(tmdbId) {
-  const data = await get(`/movie/${tmdbId}/watch/providers`);
-  return data.results?.US ?? null;
+export async function getMovieDetails(tmdbId) {
+  const data = await get(`/movie/${tmdbId}`, { append_to_response: "watch/providers" });
+  return {
+    runtime: data.runtime ?? null,
+    providers: data["watch/providers"]?.results?.US ?? null,
+  };
 }
 
 export async function findPerson(name) {
