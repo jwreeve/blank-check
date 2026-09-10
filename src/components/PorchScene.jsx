@@ -66,10 +66,10 @@ const BOTTOM_BAR_CLEARANCE = 56;
 // mirrors the one .porch-stage itself uses to flip from inert to
 // interactive, so the disclaimer collapses exactly when the TV takes over.
 const ZOOMED_THRESHOLD = 0.85;
-// How much room the top banner needs, so the header can drop below it
-// instead of overlapping - generous rather than measured, same approach as
-// BOTTOM_BAR_CLEARANCE above.
-const MOBILE_BANNER_CLEARANCE = 168;
+// Where the top banner sits, below the "Porch Movies" header so reading
+// order is title first, then disclaimer - generous rather than measured,
+// same approach as BOTTOM_BAR_CLEARANCE above.
+const MOBILE_BANNER_TOP = 145;
 
 function lerp(a, b, t) {
   return a + (b - a) * t;
@@ -299,7 +299,6 @@ export default function PorchScene({ header, children }) {
             right: `${headerRight}px`,
             textAlign: t > 0.5 ? "right" : "center",
             "--header-scale": headerScale,
-            top: isMobile && !zoomedIn ? `${MOBILE_BANNER_CLEARANCE}px` : undefined,
           }}
         >
           {header}
@@ -325,7 +324,10 @@ export default function PorchScene({ header, children }) {
         {isMobile ? (
           <>
             {!zoomedIn && (
-              <div className="disclaimer disclaimer-banner">
+              <div
+                className="disclaimer disclaimer-banner"
+                style={{ top: `${MOBILE_BANNER_TOP}px` }}
+              >
                 <DisclaimerText />
               </div>
             )}

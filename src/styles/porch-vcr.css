@@ -202,13 +202,14 @@
    rather than a tiny corner box. See PorchScene.jsx for the state
    driving which of the three is shown. */
 .disclaimer-banner {
-  top: 0;
+  /* top is set inline (MOBILE_BANNER_TOP in PorchScene.jsx), below the
+     "Porch Movies" header so reading order is title first, disclaimer
+     second. */
   right: 0;
   bottom: auto;
   left: 0;
   width: auto !important;
-  border-radius: 0 0 10px 10px;
-  z-index: 3;
+  border-radius: 10px;
   --disc-scale: 1.25;
 }
 
