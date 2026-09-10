@@ -17,12 +17,17 @@ export default function VCRDeck({
   onEject,
   onPrev,
   onNext,
+  onPower,
 }) {
   return (
     <div className={`vcr-deck ${ejecting ? "vcr-deck-ejecting" : ""}`}>
-      <div className="vcr-tape-slot">
-        <div className="vcr-tape" />
-      </div>
+      <VCRButton
+        className="vcr-btn-power"
+        icon="⏻"
+        label="Power"
+        hint="Zoom back out"
+        onClick={onPower}
+      />
 
       <div className="vcr-display">
         {playing ? (

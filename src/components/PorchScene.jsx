@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useScrollProgress from "../hooks/useScrollProgress";
 
 // How many viewport-heights of scrolling the walk-up takes.
@@ -59,6 +59,18 @@ const DISC_END_SCALE = 0.92;
 // clear it instead of sitting underneath it.
 const BOTTOM_BAR_CLEARANCE = 56;
 
+// On mobile the shrunk-corner-box treatment (used on desktop) was too small
+// to read once fully zoomed in, so mobile gets a different pattern instead:
+// a full-width banner at rest, which collapses into a small "Disclaimer"
+// link in the corner once zoomed in (tap it to reopen). ZOOMED_THRESHOLD
+// mirrors the one .porch-stage itself uses to flip from inert to
+// interactive, so the disclaimer collapses exactly when the TV takes over.
+const ZOOMED_THRESHOLD = 0.85;
+// How much room the top banner needs, so the header can drop below it
+// instead of overlapping - generous rather than measured, same approach as
+// BOTTOM_BAR_CLEARANCE above.
+const MOBILE_BANNER_CLEARANCE = 168;
+
 function lerp(a, b, t) {
   return a + (b - a) * t;
 }
@@ -69,9 +81,38 @@ function ease(t) {
   return t * t * (3 - 2 * t);
 }
 
+function DisclaimerText() {
+  return (
+    <>
+      <h2>Disclaimer</h2>
+      <p>
+        This app/website is an independent project created by John A Haverty LLC and is
+        not affiliated with, endorsed by, or sponsored by the Blank Check podcast or
+        Blank Check Productions. All references to Blank Check are made for
+        identification and commentary purposes only.
+      </p>
+      <p>This app and its content are © 2026 John A Haverty LLC. All rights reserved.</p>
+    </>
+  );
+}
+
 export default function PorchScene({ header, children }) {
   const progress = useScrollProgress(ZOOM_RANGE);
   const t = ease(progress);
+  const zoomedIn = t > ZOOMED_THRESHOLD;
+
+  // Whether the mobile disclaimer's full text is pulled back up after being
+  // collapsed to a link. Reset once we scroll back out of the zoomed range,
+  // so it starts collapsed again next time rather than reopening stale.
+  // Adjusted during render (React's documented pattern for resetting state
+  // when a prop/derived value changes) rather than in an effect, which
+  // would cause an extra cascading render for the same result.
+  const [disclaimerExpanded, setDisclaimerExpanded] = useState(false);
+  const [prevZoomedIn, setPrevZoomedIn] = useState(zoomedIn);
+  if (zoomedIn !== prevZoomedIn) {
+    setPrevZoomedIn(zoomedIn);
+    if (!zoomedIn) setDisclaimerExpanded(false);
+  }
 
   // Clicking the tiny TV walks the scene all the way in, exactly as if the
   // user had scrolled/swiped through the whole range themselves - scroll
@@ -120,19 +161,18 @@ export default function PorchScene({ header, children }) {
   const clusterRight = lerp(0, 16, t);
   const clusterBottom = lerp(BOTTOM_BAR_CLEARANCE, BOTTOM_BAR_CLEARANCE + 16, t);
 
+  // Desktop only - mobile uses the banner/link/popup pattern above instead
+  // (see DisclaimerText usage below).
   const discWidth = lerp(Math.min(vw - 32, DISC_REST_WIDTH), Math.min(vw - 32, DISC_END_WIDTH), t);
-  // On mobile the TV settles dead-center (see settleX above) right above
-  // this bottom-right corner, and the permanent .ai-notice bar eats into
-  // the room below it too, so the zoomed-in size stays much more
-  // conservative there to keep it from riding up into the TV.
-  const discEndScale = isMobile ? 0.5 : DISC_END_SCALE;
-  const discScale = lerp(DISC_REST_SCALE, discEndScale, t);
+  const discScale = lerp(DISC_REST_SCALE, DISC_END_SCALE, t);
 
   // Keep the (React-external) coffee button clear of the disclaimer as it
   // docks into the corner beneath it, and keep it hidden entirely until the
   // walk-up has essentially finished. On narrow viewports it docks centered
-  // under the TV instead, in the gap above the disclaimer — measured live
-  // off the actual DOM rects so it holds up at any mobile screen size.
+  // under the TV instead, in the gap above the permanent .ai-notice bar —
+  // measured live off the actual DOM rects so it holds up at any mobile
+  // screen size. (Anchored to .ai-notice rather than .disclaimer since the
+  // mobile disclaimer isn't reliably present once collapsed to a link.)
   //
   // Also re-measures on raw scroll/resize events, not just when `t` changes:
   // `t` clamps at 1 once fully zoomed in, but on iOS, forcing a bit more
@@ -157,16 +197,15 @@ export default function PorchScene({ header, children }) {
 
       if (mobile) {
         const stage = document.querySelector(".porch-stage");
-        const disclaimerEl = document.querySelector(".disclaimer");
-        if (stage && disclaimerEl) {
+        const bottomBar = document.querySelector(".ai-notice");
+        if (stage && bottomBar) {
           const stageBottom = stage.getBoundingClientRect().bottom;
-          const disclaimerTop = disclaimerEl.getBoundingClientRect().top;
-          // Center in the gap between the TV and the disclaimer - but on a
-          // narrow phone the (now bigger) disclaimer card can leave little
-          // or no gap there, so favor sitting just under the TV rather
-          // than getting pulled down into the disclaimer's own territory.
+          const bottomBarTop = bottomBar.getBoundingClientRect().top;
+          // Center in the gap between the TV and the bottom bar - but on a
+          // narrow phone that gap can be tiny, so favor sitting just under
+          // the TV rather than getting pulled down into the bottom bar.
           const gapTop = stageBottom + 6;
-          const gapBottom = Math.max(gapTop, disclaimerTop - 6);
+          const gapBottom = Math.max(gapTop, bottomBarTop - 6);
           const centerY = (gapTop + gapBottom) / 2;
           btn.style.left = "50%";
           btn.style.right = "auto";
@@ -182,7 +221,12 @@ export default function PorchScene({ header, children }) {
         btn.style.bottom = `${lerp(BMC_REST_BOTTOM, BMC_END_BOTTOM, t)}px`;
       }
 
-      const btnOpacity = Math.max(0, Math.min(1, (t - 0.9) / 0.1));
+      // The coffee button lives outside React's tree in its own stacking
+      // context, so it can paint over the mobile disclaimer popup no
+      // matter how high that popup's own z-index goes - hide it outright
+      // while the popup is open instead.
+      const btnOpacity =
+        mobile && disclaimerExpanded ? 0 : Math.max(0, Math.min(1, (t - 0.9) / 0.1));
       btn.style.opacity = btnOpacity;
       btn.style.pointerEvents = btnOpacity > 0.5 ? "auto" : "none";
     };
@@ -204,7 +248,7 @@ export default function PorchScene({ header, children }) {
       if (raf) cancelAnimationFrame(raf);
       retryTimers.forEach(clearTimeout);
     };
-  }, [t]);
+  }, [t, disclaimerExpanded]);
 
   return (
     <div className="porch-scene" style={{ height: `${(1 + ZOOM_RANGE) * 100}dvh` }}>
@@ -255,6 +299,7 @@ export default function PorchScene({ header, children }) {
             right: `${headerRight}px`,
             textAlign: t > 0.5 ? "right" : "center",
             "--header-scale": headerScale,
+            top: isMobile && !zoomedIn ? `${MOBILE_BANNER_CLEARANCE}px` : undefined,
           }}
         >
           {header}
@@ -277,22 +322,49 @@ export default function PorchScene({ header, children }) {
           )}
         </div>
 
-        <div
-          className="disclaimer"
-          style={{
-            width: `${discWidth}px`,
-            "--disc-scale": discScale,
-          }}
-        >
-          <h2>Disclaimer</h2>
-          <p>
-            This app/website is an independent project created by John A Haverty LLC and is
-            not affiliated with, endorsed by, or sponsored by the Blank Check podcast or
-            Blank Check Productions. All references to Blank Check are made for
-            identification and commentary purposes only.
-          </p>
-          <p>This app and its content are © 2026 John A Haverty LLC. All rights reserved.</p>
-        </div>
+        {isMobile ? (
+          <>
+            {!zoomedIn && (
+              <div className="disclaimer disclaimer-banner">
+                <DisclaimerText />
+              </div>
+            )}
+
+            {zoomedIn && !disclaimerExpanded && (
+              <button
+                type="button"
+                className="disclaimer-link"
+                onClick={() => setDisclaimerExpanded(true)}
+              >
+                Disclaimer
+              </button>
+            )}
+
+            {zoomedIn && disclaimerExpanded && (
+              <div className="disclaimer disclaimer-popup">
+                <button
+                  type="button"
+                  className="disclaimer-close"
+                  onClick={() => setDisclaimerExpanded(false)}
+                  aria-label="Close disclaimer"
+                >
+                  ×
+                </button>
+                <DisclaimerText />
+              </div>
+            )}
+          </>
+        ) : (
+          <div
+            className="disclaimer"
+            style={{
+              width: `${discWidth}px`,
+              "--disc-scale": discScale,
+            }}
+          >
+            <DisclaimerText />
+          </div>
+        )}
 
         <div className="ai-notice">
           This app was created by a human, but AI tools were used during development to help

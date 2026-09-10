@@ -129,6 +129,7 @@ export default function App() {
         onEject={eject}
         onPrev={() => shift(-1)}
         onNext={() => shift(1)}
+        onPower={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       />
 
       <TVFrame channelKey={channelKey}>

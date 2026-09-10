@@ -195,6 +195,70 @@
   opacity: 0.85;
 }
 
+/* Mobile-only alternative to the shrinking corner box above, which read
+   too small once fully zoomed in on a phone. A full-width banner at rest,
+   collapsing to a small tappable link (.disclaimer-link) once zoomed in,
+   which reopens the full text as a legible popup (.disclaimer-popup)
+   rather than a tiny corner box. See PorchScene.jsx for the state
+   driving which of the three is shown. */
+.disclaimer-banner {
+  top: 0;
+  right: 0;
+  bottom: auto;
+  left: 0;
+  width: auto !important;
+  border-radius: 0 0 10px 10px;
+  z-index: 3;
+  --disc-scale: 1.25;
+}
+
+.disclaimer-link {
+  position: absolute;
+  z-index: 2;
+  right: 16px;
+  bottom: 72px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(10, 10, 12, 0.55);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  color: #e9e6de;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.disclaimer-link:hover {
+  color: #fff;
+  background: rgba(10, 10, 12, 0.75);
+}
+
+.disclaimer-popup {
+  left: 16px;
+  width: auto !important;
+  padding-right: 30px;
+  --disc-scale: 1.05;
+}
+
+.disclaimer-close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  border: none;
+  background: none;
+  color: #e9e6de;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.disclaimer-close:hover {
+  color: #fff;
+}
+
 /* A thin bar permanently pinned along the very bottom edge of the screen,
    always present regardless of scroll position (unlike the disclaimer,
    which only shrinks - this never moves or resizes). */
@@ -466,29 +530,6 @@
   30% { transform: translateY(3px); }
 }
 
-.vcr-tape-slot {
-  width: 42px;
-  height: 16px;
-  background: #050505;
-  border-radius: 3px;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
-  flex-shrink: 0;
-  overflow: hidden;
-  position: relative;
-}
-
-.vcr-tape {
-  position: absolute;
-  inset: 3px;
-  background: linear-gradient(#2a2a2a, #1a1a1a);
-  border-radius: 2px;
-  transition: transform 0.5s ease;
-}
-
-.vcr-deck-ejecting .vcr-tape {
-  transform: translateY(-14px);
-}
-
 .vcr-display {
   font-family: "VT323", ui-monospace, monospace;
   background: #060606;
@@ -631,6 +672,11 @@
 .vcr-btn-eject {
   background: linear-gradient(160deg, #6b3a3a, #3f1f1f);
   color: #ffb9b9;
+}
+
+.vcr-btn-power {
+  background: linear-gradient(160deg, #6b5326, #3f2f14);
+  color: #ffd9a0;
 }
 
 @media (max-width: 480px) {
