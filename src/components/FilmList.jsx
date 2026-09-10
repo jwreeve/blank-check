@@ -1,5 +1,15 @@
 import { track } from "@vercel/analytics";
 import { IMG_BASE } from "../services/tmdb";
+import { amazonPhysicalMediaLink } from "../services/amazon";
+import uhd4kBadge from "../assets/4k-uhd.png";
+import bluRayBadge from "../assets/blu-ray.png";
+import dvdBadge from "../assets/dvd.jpeg";
+
+const PHYSICAL_FORMATS = [
+  { key: "4k", label: "4K UHD", image: uhd4kBadge, query: "4k" },
+  { key: "bluray", label: "Blu-ray", image: bluRayBadge, query: "blu-ray" },
+  { key: "dvd", label: "DVD", image: dvdBadge, query: "dvd" },
+];
 
 function formatRuntime(minutes) {
   if (!minutes) return null;
@@ -48,6 +58,27 @@ function ProviderRow({ label, providers, watchLink, filmTitle }) {
   );
 }
 
+function PhysicalMediaRow({ title }) {
+  return (
+    <div className="film-providers">
+      <span className="film-providers-label">Buy Physical Media</span>
+      {PHYSICAL_FORMATS.map((format) => (
+        <a
+          key={format.key}
+          href={amazonPhysicalMediaLink(title, format.query)}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          className="physical-media-badge"
+          title={`Buy ${title} on ${format.label} (Amazon)`}
+          onClick={() => track("click_physical_media", { format: format.key, film: title })}
+        >
+          <img src={format.image} alt={format.label} className="physical-media-logo" />
+        </a>
+      ))}
+    </div>
+  );
+}
+
 export function FilmRow({ film }) {
   const streaming = dedupeProviders([
     ...(film.providers?.flatrate ?? []),
@@ -80,6 +111,7 @@ export function FilmRow({ film }) {
       ) : (
         <span className="film-unavailable">Not streaming</span>
       )}
+      <PhysicalMediaRow title={film.title} />
     </div>
   );
 }
