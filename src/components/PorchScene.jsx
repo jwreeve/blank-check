@@ -29,7 +29,9 @@ const TV_SCALE_BOOST = 1.2;
 // so its scroll-linked clearance above the docked disclaimer is applied
 // imperatively rather than through React state.
 const BMC_REST_BOTTOM = 250;
-const BMC_END_BOTTOM = 132;
+// 132 plus BOTTOM_BAR_CLEARANCE (below) so it clears the disclaimer, which
+// is itself shifted up out of the permanent .ai-notice bar's way.
+const BMC_END_BOTTOM = 188;
 
 // The widget's own natural (unscaled) rendered height — used so the
 // mobile centering math stays correct even though the button is shrunk via
@@ -42,6 +44,20 @@ const BMC_MOBILE_SCALE = 0.72;
 // of in the right-hand column with the header/disclaimer, and the TV
 // settles dead-center instead of shifted left for that column.
 const MOBILE_BREAKPOINT = 640;
+
+// The disclaimer sits permanently as a boxed card in the bottom-right
+// corner - unlike the header/hint, it doesn't reflow position as the
+// walk-up progresses. It just shrinks a bit, in both box width and font
+// size, once the walk-up completes.
+const DISC_REST_WIDTH = 380;
+const DISC_END_WIDTH = 340;
+const DISC_REST_SCALE = 1.15;
+const DISC_END_SCALE = 0.92;
+
+// Vertical space permanently reserved at the very bottom of the screen for
+// the AI-notice bar (see .ai-notice), so the disclaimer and scroll-hint
+// clear it instead of sitting underneath it.
+const BOTTOM_BAR_CLEARANCE = 56;
 
 function lerp(a, b, t) {
   return a + (b - a) * t;
@@ -56,6 +72,14 @@ function ease(t) {
 export default function PorchScene({ header, children }) {
   const progress = useScrollProgress(ZOOM_RANGE);
   const t = ease(progress);
+
+  // Clicking the tiny TV walks the scene all the way in, exactly as if the
+  // user had scrolled/swiped through the whole range themselves - scroll
+  // position is what drives the walk-up (see useScrollProgress), so this
+  // just animates scrollY to the end of it.
+  function walkIn() {
+    window.scrollTo({ top: window.innerHeight * ZOOM_RANGE, behavior: "smooth" });
+  }
 
   const zoom = lerp(1, ZOOM_TARGET, t);
   const stageBoost = lerp(1, TV_SCALE_BOOST, t);
@@ -85,23 +109,24 @@ export default function PorchScene({ header, children }) {
   const headerRight = lerp((vw - headerRestWidth) / 2, 16, t);
   const headerScale = lerp(1, 1.65, t);
 
-  // The hint + disclaimer share one flex column so they stack by actual
-  // rendered height (however many lines the disclaimer wraps to on a given
-  // viewport) instead of guessed pixel gaps. It slides from a full-width
-  // bar flush with the bottom edge at rest to a narrow block docked under
-  // the coffee button once the walk-up completes.
+  // The scroll hint slides from a full-width bar flush with the bottom edge
+  // at rest to a narrow block docked under the coffee button once the
+  // walk-up completes (it's gone well before that point in practice, since
+  // it fades out by progress 0.3, but this keeps it anchored sensibly for
+  // the brief window it's visible).
   const clusterRestWidth = vw;
   const clusterEndWidth = Math.min(vw - 32, 340);
   const clusterWidth = lerp(clusterRestWidth, clusterEndWidth, t);
   const clusterRight = lerp(0, 16, t);
-  const clusterBottom = lerp(0, 16, t);
-  // The larger rest-state size reads fine on desktop, but on mobile the
-  // disclaimer already fills more of the narrow viewport at launch, so it
-  // stays at its original (pre-boost) size there. The zoomed-in end size
-  // is unaffected on both.
-  const discRestScale = isMobile ? 0.82 : 0.82 * 1.38;
-  const discScale = lerp(discRestScale, 0.68 * 1.38, t);
-  const discRadius = t > 0.5 ? 10 : 0;
+  const clusterBottom = lerp(BOTTOM_BAR_CLEARANCE, BOTTOM_BAR_CLEARANCE + 16, t);
+
+  const discWidth = lerp(Math.min(vw - 32, DISC_REST_WIDTH), Math.min(vw - 32, DISC_END_WIDTH), t);
+  // On mobile the TV settles dead-center (see settleX above) right above
+  // this bottom-right corner, and the permanent .ai-notice bar eats into
+  // the room below it too, so the zoomed-in size stays much more
+  // conservative there to keep it from riding up into the TV.
+  const discEndScale = isMobile ? 0.5 : DISC_END_SCALE;
+  const discScale = lerp(DISC_REST_SCALE, discEndScale, t);
 
   // Keep the (React-external) coffee button clear of the disclaimer as it
   // docks into the corner beneath it, and keep it hidden entirely until the
@@ -132,11 +157,17 @@ export default function PorchScene({ header, children }) {
 
       if (mobile) {
         const stage = document.querySelector(".porch-stage");
-        const cluster = document.querySelector(".bottom-cluster");
-        if (stage && cluster) {
+        const disclaimerEl = document.querySelector(".disclaimer");
+        if (stage && disclaimerEl) {
           const stageBottom = stage.getBoundingClientRect().bottom;
-          const clusterTop = cluster.getBoundingClientRect().top;
-          const centerY = (stageBottom + clusterTop) / 2;
+          const disclaimerTop = disclaimerEl.getBoundingClientRect().top;
+          // Center in the gap between the TV and the disclaimer - but on a
+          // narrow phone the (now bigger) disclaimer card can leave little
+          // or no gap there, so favor sitting just under the TV rather
+          // than getting pulled down into the disclaimer's own territory.
+          const gapTop = stageBottom + 6;
+          const gapBottom = Math.max(gapTop, disclaimerTop - 6);
+          const centerY = (gapTop + gapBottom) / 2;
           btn.style.left = "50%";
           btn.style.right = "auto";
           btn.style.transform = `translateX(-50%) scale(${BMC_MOBILE_SCALE})`;
@@ -194,6 +225,26 @@ export default function PorchScene({ header, children }) {
           >
             {children}
           </div>
+
+          {/* Invisible hit target over the tiny TV so people who don't
+              realize the page scrolls can just click it - triggers the same
+              smooth walk-up as manually scrolling. Only present while the
+              real TV controls are inert (t <= 0.85, mirroring porch-stage's
+              own pointerEvents threshold above) so it never shadows a click
+              meant for the actual TV/VCR once zoomed in. */}
+          {t <= 0.85 && (
+            <button
+              type="button"
+              className="porch-walk-in-hit"
+              style={{
+                left: `${ANCHOR.x}%`,
+                top: `${ANCHOR.y}%`,
+                transform: `translate(-50%, -50%) scale(${REST_SCALE * stageBoost})`,
+              }}
+              onClick={walkIn}
+              aria-label="Walk up to the TV"
+            />
+          )}
         </div>
 
         <div
@@ -224,24 +275,28 @@ export default function PorchScene({ header, children }) {
               Swipe up to walk onto the porch.
             </div>
           )}
+        </div>
 
-          <div
-            className="disclaimer"
-            style={{
-              textAlign: t > 0.5 ? "left" : "center",
-              borderRadius: `${discRadius}px`,
-              "--disc-scale": discScale,
-            }}
-          >
-            <h2>Disclaimer</h2>
-            <p>
-              This app/website is an independent project created by John A Haverty LLC and is
-              not affiliated with, endorsed by, or sponsored by the Blank Check podcast or
-              Blank Check Productions. All references to Blank Check are made for
-              identification and commentary purposes only.
-            </p>
-            <p>This app and its content are © 2026 John A Haverty LLC. All rights reserved.</p>
-          </div>
+        <div
+          className="disclaimer"
+          style={{
+            width: `${discWidth}px`,
+            "--disc-scale": discScale,
+          }}
+        >
+          <h2>Disclaimer</h2>
+          <p>
+            This app/website is an independent project created by John A Haverty LLC and is
+            not affiliated with, endorsed by, or sponsored by the Blank Check podcast or
+            Blank Check Productions. All references to Blank Check are made for
+            identification and commentary purposes only.
+          </p>
+          <p>This app and its content are © 2026 John A Haverty LLC. All rights reserved.</p>
+        </div>
+
+        <div className="ai-notice">
+          This app was created by a human, but AI tools were used during development to help
+          with coding.
         </div>
       </div>
     </div>
