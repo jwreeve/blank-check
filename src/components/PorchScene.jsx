@@ -66,10 +66,17 @@ const BOTTOM_BAR_CLEARANCE = 56;
 // mirrors the one .porch-stage itself uses to flip from inert to
 // interactive, so the disclaimer collapses exactly when the TV takes over.
 const ZOOMED_THRESHOLD = 0.85;
-// Where the top banner sits, below the "Porch Movies" header so reading
-// order is title first, then disclaimer - generous rather than measured,
-// same approach as BOTTOM_BAR_CLEARANCE above.
-const MOBILE_BANNER_TOP = 145;
+
+// On mobile the AI-use notice moves to a permanent bar along the very top
+// of the screen (instead of the bottom, like on desktop), so the header
+// needs to sit below it the whole time - not just at rest, since the
+// notice bar never goes away. Generous rather than measured, same
+// approach as BOTTOM_BAR_CLEARANCE above.
+const MOBILE_HEADER_TOP = 56;
+// How much room the mobile disclaimer banner (the full-text, rest-state
+// version) needs at the bottom of the screen, so the scroll hint sits
+// above it instead of underneath it.
+const MOBILE_DISCLAIMER_BANNER_HEIGHT = 168;
 
 function lerp(a, b, t) {
   return a + (b - a) * t;
@@ -159,7 +166,11 @@ export default function PorchScene({ header, children }) {
   const clusterEndWidth = Math.min(vw - 32, 340);
   const clusterWidth = lerp(clusterRestWidth, clusterEndWidth, t);
   const clusterRight = lerp(0, 16, t);
-  const clusterBottom = lerp(BOTTOM_BAR_CLEARANCE, BOTTOM_BAR_CLEARANCE + 16, t);
+  // On mobile the disclaimer banner (not the AI-notice bar) now occupies
+  // the bottom at rest, and it's much taller, so the hint needs to clear
+  // that instead.
+  const clusterRestClearance = isMobile ? MOBILE_DISCLAIMER_BANNER_HEIGHT : BOTTOM_BAR_CLEARANCE;
+  const clusterBottom = lerp(clusterRestClearance, clusterRestClearance + 16, t);
 
   // Desktop only - mobile uses the banner/link/popup pattern above instead
   // (see DisclaimerText usage below).
@@ -169,10 +180,12 @@ export default function PorchScene({ header, children }) {
   // Keep the (React-external) coffee button clear of the disclaimer as it
   // docks into the corner beneath it, and keep it hidden entirely until the
   // walk-up has essentially finished. On narrow viewports it docks centered
-  // under the TV instead, in the gap above the permanent .ai-notice bar —
-  // measured live off the actual DOM rects so it holds up at any mobile
-  // screen size. (Anchored to .ai-notice rather than .disclaimer since the
-  // mobile disclaimer isn't reliably present once collapsed to a link.)
+  // under the TV instead, in the gap above the bottom edge — measured live
+  // off the actual DOM rects so it holds up at any mobile screen size.
+  // (Just the screen edge itself, with a margin, rather than anchored to
+  // any particular element: the AI-notice bar lives at the top on mobile
+  // now, and the disclaimer isn't reliably present at the bottom once
+  // collapsed to a link.)
   //
   // Also re-measures on raw scroll/resize events, not just when `t` changes:
   // `t` clamps at 1 once fully zoomed in, but on iOS, forcing a bit more
@@ -197,15 +210,14 @@ export default function PorchScene({ header, children }) {
 
       if (mobile) {
         const stage = document.querySelector(".porch-stage");
-        const bottomBar = document.querySelector(".ai-notice");
-        if (stage && bottomBar) {
+        if (stage) {
           const stageBottom = stage.getBoundingClientRect().bottom;
-          const bottomBarTop = bottomBar.getBoundingClientRect().top;
-          // Center in the gap between the TV and the bottom bar - but on a
-          // narrow phone that gap can be tiny, so favor sitting just under
-          // the TV rather than getting pulled down into the bottom bar.
+          const screenFloor = window.innerHeight - 16;
+          // Center in the gap between the TV and the bottom of the screen -
+          // but on a narrow phone that gap can be tiny, so favor sitting
+          // just under the TV rather than getting pulled down too far.
           const gapTop = stageBottom + 6;
-          const gapBottom = Math.max(gapTop, bottomBarTop - 6);
+          const gapBottom = Math.max(gapTop, screenFloor);
           const centerY = (gapTop + gapBottom) / 2;
           btn.style.left = "50%";
           btn.style.right = "auto";
@@ -299,6 +311,7 @@ export default function PorchScene({ header, children }) {
             right: `${headerRight}px`,
             textAlign: t > 0.5 ? "right" : "center",
             "--header-scale": headerScale,
+            top: isMobile ? `${MOBILE_HEADER_TOP}px` : undefined,
           }}
         >
           {header}
@@ -324,10 +337,7 @@ export default function PorchScene({ header, children }) {
         {isMobile ? (
           <>
             {!zoomedIn && (
-              <div
-                className="disclaimer disclaimer-banner"
-                style={{ top: `${MOBILE_BANNER_TOP}px` }}
-              >
+              <div className="disclaimer disclaimer-banner">
                 <DisclaimerText />
               </div>
             )}
@@ -368,7 +378,7 @@ export default function PorchScene({ header, children }) {
           </div>
         )}
 
-        <div className="ai-notice">
+        <div className={isMobile ? "ai-notice ai-notice-top" : "ai-notice"}>
           This app was created by a human, but AI tools were used during development to help
           with coding.
         </div>

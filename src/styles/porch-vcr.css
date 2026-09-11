@@ -196,20 +196,18 @@
 }
 
 /* Mobile-only alternative to the shrinking corner box above, which read
-   too small once fully zoomed in on a phone. A full-width banner at rest,
-   collapsing to a small tappable link (.disclaimer-link) once zoomed in,
-   which reopens the full text as a legible popup (.disclaimer-popup)
-   rather than a tiny corner box. See PorchScene.jsx for the state
-   driving which of the three is shown. */
+   too small once fully zoomed in on a phone. A full-width banner flush
+   with the bottom edge at rest, collapsing to a small tappable link
+   (.disclaimer-link) once zoomed in, which reopens the full text as a
+   legible popup (.disclaimer-popup) rather than a tiny corner box. See
+   PorchScene.jsx for the state driving which of the three is shown. */
 .disclaimer-banner {
-  /* top is set inline (MOBILE_BANNER_TOP in PorchScene.jsx), below the
-     "Porch Movies" header so reading order is title first, disclaimer
-     second. */
+  top: auto;
   right: 0;
-  bottom: auto;
+  bottom: 0;
   left: 0;
   width: auto !important;
-  border-radius: 10px;
+  border-radius: 10px 10px 0 0;
   --disc-scale: 1.25;
 }
 
@@ -217,7 +215,7 @@
   position: absolute;
   z-index: 2;
   right: 16px;
-  bottom: 72px;
+  bottom: 16px;
   padding: 7px 14px;
   border-radius: 999px;
   border: none;
@@ -238,6 +236,7 @@
 
 .disclaimer-popup {
   left: 16px;
+  bottom: 16px;
   width: auto !important;
   padding-right: 30px;
   --disc-scale: 1.05;
@@ -276,6 +275,14 @@
   font-size: 0.62rem;
   line-height: 1.3;
   text-align: center;
+}
+
+/* On mobile this bar moves to the very top of the screen instead, above
+   the header - see .ai-notice-top usage in PorchScene.jsx. */
+.ai-notice-top {
+  top: 0;
+  bottom: auto;
+  border-radius: 0 0 10px 10px;
 }
 
 @media (prefers-reduced-motion: reduce) {
