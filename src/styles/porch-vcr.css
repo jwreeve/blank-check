@@ -207,6 +207,7 @@
   bottom: 0;
   left: 0;
   width: auto !important;
+  padding-right: 34px;
   border-radius: 10px 10px 0 0;
   --disc-scale: 1.25;
 }

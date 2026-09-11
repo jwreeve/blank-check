@@ -121,6 +121,11 @@ export default function PorchScene({ header, children }) {
     if (!zoomedIn) setDisclaimerExpanded(false);
   }
 
+  // Whether the rest-state mobile disclaimer banner has been dismissed via
+  // its "x". Dismissing it only hides that banner - the "Disclaimer" link
+  // shown once zoomed in (and the full text it reopens) is unaffected.
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+
   // Clicking the tiny TV walks the scene all the way in, exactly as if the
   // user had scrolled/swiped through the whole range themselves - scroll
   // position is what drives the walk-up (see useScrollProgress), so this
@@ -336,8 +341,16 @@ export default function PorchScene({ header, children }) {
 
         {isMobile ? (
           <>
-            {!zoomedIn && (
+            {!zoomedIn && !bannerDismissed && (
               <div className="disclaimer disclaimer-banner">
+                <button
+                  type="button"
+                  className="disclaimer-close"
+                  onClick={() => setBannerDismissed(true)}
+                  aria-label="Close disclaimer"
+                >
+                  ×
+                </button>
                 <DisclaimerText />
               </div>
             )}
