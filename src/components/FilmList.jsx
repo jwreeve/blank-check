@@ -111,7 +111,11 @@ export function FilmRow({ film }) {
       ) : (
         <span className="film-unavailable">Not streaming</span>
       )}
-      <PhysicalMediaRow title={film.title} />
+      {/* Shorts generally aren't sold on physical media, and searching
+          Amazon for one just surfaces junk/unrelated results - skip the
+          row rather than link to a dead end. Runtime is TMDB data and
+          isn't always present, so an unknown runtime still gets the row. */}
+      {(!film.runtime || film.runtime >= 60) && <PhysicalMediaRow title={film.title} />}
     </div>
   );
 }
