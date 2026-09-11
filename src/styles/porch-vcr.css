@@ -117,14 +117,14 @@
 
 .page-subtitle {
   margin-top: 4px;
-  font-size: calc(0.85rem * var(--header-scale, 1));
+  font-size: calc(0.85rem * var(--subtitle-scale, var(--header-scale, 1)));
   color: #ece7da;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
 }
 
 @media (max-width: 640px) {
   .page-header h1 { font-size: calc(1.2rem * var(--header-scale, 1)); }
-  .page-subtitle { font-size: calc(0.72rem * var(--header-scale, 1)); }
+  .page-subtitle { font-size: calc(0.72rem * var(--subtitle-scale, var(--header-scale, 1))); }
 }
 
 /* ───────────────────── Scroll hint + disclaimer ─────────────────────

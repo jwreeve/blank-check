@@ -161,6 +161,11 @@ export default function PorchScene({ header, children }) {
   const headerWidth = lerp(headerRestWidth, headerEndWidth, t);
   const headerRight = lerp((vw - headerRestWidth) / 2, 16, t);
   const headerScale = lerp(1, 1.65, t);
+  // On mobile the header box sits over the top of the TV once zoomed in, so
+  // the subtitle (unlike the h1) doesn't grow with headerScale there - it
+  // stays at its rest size instead, keeping the box short enough to clear
+  // the TV's controls underneath.
+  const subtitleScale = isMobile ? 1 : headerScale;
 
   // The scroll hint slides from a full-width bar flush with the bottom edge
   // at rest to a narrow block docked under the coffee button once the
@@ -316,6 +321,7 @@ export default function PorchScene({ header, children }) {
             right: `${headerRight}px`,
             textAlign: t > 0.5 ? "right" : "center",
             "--header-scale": headerScale,
+            "--subtitle-scale": subtitleScale,
             top: isMobile ? `${MOBILE_HEADER_TOP}px` : undefined,
           }}
         >
